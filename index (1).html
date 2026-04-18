@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mortgage Assistance Application | Bowin Law Group</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    #loading { display:flex; align-items:center; justify-content:center; height:100vh; font-size:14px; color:#666; }
+  </style>
+</head>
+<body>
+  <div id="loading">Loading form...</div>
+  <div id="root" style="display:none"></div>
+
+  <script>
+    // Load the Form 710 PDF base64 first, then render the app
+    fetch('form710.b64')
+      .then(r => r.text())
+      .then(b64 => {
+        window.__FORM710_B64__ = b64.trim();
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('root').style.display = 'block';
+        // Now load and transform the app script
+        var s = document.getElementById('app-script');
+        s.style.display = 'none';
+        Babel.transformScriptTags();
+      })
+      .catch(e => {
+        document.getElementById('loading').textContent = 'Error loading form. Please refresh.';
+        console.error(e);
+      });
+  </script>
+
+  <script type="text/babel" id="app-script">
+    const { useState, useRef, useEffect, useCallback, memo } = React;
+    const ChevronRight = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>;
+    const ChevronLeft = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>;
+    const Upload = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>;
+    const X = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+    const CheckCircle = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+    const FileText = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>;
+    const Printer = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>;
+    const Building2 = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="14" y2="6"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="10" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="14" y2="14"/></svg>;
+    const User = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+    const Users = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+    const Home = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+    const AlertTriangle = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
+    const DollarSign = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>;
+    const Wallet = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>;
+    const ClipboardList = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="12" y1="11" x2="16" y2="11"/><line x1="12" y1="16" x2="16" y2="16"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="8" y1="16" x2="8.01" y2="16"/></svg>;
+    const Eye = (p) => <svg {...p} xmlns="http://www.w3.org/2000/svg" width={p.size||16} height={p.size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>;
+
+
+const NAV_COLOR = "#1e3a5f";
+const GOLD = "#c9a84c";
+const FORM710_B64 = window.__FORM710_B64__;
+
+// ── Servicers ─────────────────────────────────────────────────────────────────
+const SERVICERS = [
+  { name:"Bank of America", method:"Fax or Portal", fax:"1-866-580-9307", portal:"homeloanhelp.bankofamerica.com" },
+  { name:"Carrington Mortgage Services", method:"Email", email:"mortgageassistance@carringtonms.com" },
+  { name:"Chase / JPMorgan Chase", method:"Portal Only", portal:"chase.com/mortgage", notes:"No public fax" },
+  { name:"Freedom Mortgage", method:"Online Form", portal:"freedommortgage.com/gethelp", phone:"855-690-5900 opt. 7" },
+  { name:"Mr. Cooper / Nationstar", method:"Portal or Phone", portal:"mrcooper.com", phone:"888-480-2432" },
+  { name:"Newrez / Shellpoint (formerly SLS)", method:"Portal", portal:"sms.servicingloans.com", phone:"800-315-4757" },
+  { name:"PennyMac Loan Services", method:"Portal", portal:"pennymacusa.com", phone:"800-777-4001" },
+  { name:"PHH Mortgage", method:"Phone, Verify Submission Method", phone:"800-750-2518" },
+  { name:"Rocket Mortgage / Quicken Loans", method:"Portal", portal:"rocketmortgage.com", phone:"800-508-0944" },
+  { name:"Select Portfolio Servicing (SPS)", method:"Portal", portal:"spservicing.com", phone:"800-258-8602" },
+  { name:"Truist (BB&T / SunTrust)", method:"Phone + Portal", phone:"800-827-3722 opt. 9" },
+  { name:"US Bank", method:"Portal", portal:"usbank.com/mortgage" },
+  { name:"Wells Fargo", method:"Fax, Mail, or Portal", fax:"1-866-359-7363", portal:"wellsfargo.com/mortgageassistance", mail:"PO Box 1629, Minneapolis MN 55440" },
+  { name:"Other / Not Listed", method:"Verify with Servicer", notes:"Call loss mitigation department directly" },
+];
+
+const HARDSHIP_TYPES = [
+  "Unemployment / Loss of Job","Reduction in Income","Increase in Housing Expenses",
+  "Death of Borrower or Wage Earner","Divorce or Separation",
+  "Employment Transfer or Relocation","Disability or Long-Term Illness",
+  "Separation of Borrowers (Not Related to Divorce)","Natural Disaster","Business Failure","Other",
+];
+
+const HARDSHIP_FIELD_MAP = {
+  "Unemployment / Loss of Job":"unemployment checkbox",
+  "Reduction in Income":"reduced income checkbox",
+  "Increase in Housing Expenses":"increased housing expenses checkbox",
+  "Natural Disaster":"disaster checkbox",
+  "Disability or Long-Term Illness":"long-term disability checkbox",
+  "Divorce or Separation":"divorce checkbox",
+  "Death of Borrower or Wage Earner":"death checkbox",
+  "Employment Transfer or Relocation":"employment transfer checkbox",
+  "Business Failure":"other checkbox",
+  "Separation of Borrowers (Not Related to Divorce)":"seperation checkbox",
+  "Other":"other checkbox",
+};
+
+const LONG_TERM = new Set(["Disability or Long-Term Illness","Death of Borrower or Wage Earner","Business Failure","Employment Transfer or Relocation","Divorce or Separation"]);
+
+const STEPS = [
+  {id:1,label:"Servicer",Icon:Building2},{id:2,label:"Borrower",Icon:User},
+  {id:3,label:"Co-Borrower",Icon:Users},{id:4,label:"Property",Icon:Home},
+  {id:5,label:"Hardship",Icon:AlertTriangle},{id:6,label:"Income",Icon:DollarSign},
+  {id:7,label:"Expenses",Icon:ClipboardList},{id:8,label:"Assets",Icon:Wallet},
+  {id:9,label:"Documents",Icon:FileText},{id:10,label:"Review",Icon:Eye},
+];
+
+const emptyB = {firstName:"",middleName:"",lastName:"",ssn:"",dob:"",primaryPhone:"",primaryPhoneType:"cell",alternatePhone:"",alternatePhoneType:"cell",email:"",mailingAddress:"",mailingCity:"",mailingState:"",mailingZip:"",preferredContact:"cell",primaryLanguage:"English"};
+const emptyI = {grossWages:"",selfEmploy:"",unemploy:"",taxableSSI:"",nontaxableSSI:"",rental:"",investment:"",other:"",otherDesc:""};
+
+const INIT = {
+  servicer:"",
+  borrower:{...emptyB},
+  hasCoBorrower:false,
+  coBorrower:{...emptyB},
+  property:{address:"",city:"",state:"FL",zip:"",occupancy:"primary",occupancyStatus:"owner",forSale:false,listingAgent:"",hasHOA:false,hoaMonthly:"",loanNumber:"",estimatedValue:"",unpaidBalance:""},
+  hardship:{goal:"keep",types:[],date:"",explanation:"",resolved:false,resolvedDate:"",duration:"short",military:false},
+  bIncome:{...emptyI},
+  cIncome:{...emptyI},
+  expenses:{firstMortgage:"",secondMortgage:"",hoaDues:"",taxes:"",insurance:"",creditCards:"",installments:"",alimonyOut:"",other:""},
+  assets:{checking:"",savings:"",cds:"",stocks:"",retirement:"",otherRE:"",other:""},
+  files:[],
+};
+
+// ── PDF helpers ───────────────────────────────────────────────────────────────
+const fmtMoney = v => { try { const f=parseFloat(v||0); return f?f.toLocaleString("en-US",{minimumFractionDigits:2}):""; } catch(e){return "";} };
+const fmtDate  = v => { if(!v)return""; try{ if(String(v).includes("-")){const[y,m,d]=String(v).split("-");return m+"/"+d+"/"+y;} return String(v); }catch(e){return String(v);} };
+// Robust field setter - detects actual pdf-lib field type at runtime
+const setTextField = (form,name,value) => {
+  if(!value && value!==0) return;
+  try { form.getTextField(name).setText(String(value)); }
+  catch(e){ console.warn("TextField failed:",name,e.message); }
+};
+const setRadio = (form,name,value) => {
+  if(!value) return;
+  // PDFAcroCheckBox.setValue() validates against the first widget only, so it
+  // throws when we want a different option. Bypass by setting /V directly on
+  // the dict, then walk each widget and set its appearance state manually.
+  try {
+    const { PDFName } = window.PDFLib;
+    const target = PDFName.of(String(value));
+    const off = PDFName.of('Off');
+    const fields = form.getFields();
+    for(const f of fields){
+      if(f.getName()!==name) continue;
+      // Set field /V directly, bypassing setValue() validation
+      f.acroField.dict.set(PDFName.of('V'), target);
+      // Set each widget appearance state
+      const widgets = f.acroField.getWidgets();
+      for(const w of widgets){
+        const onVal = w.getOnValue();
+        w.setAppearanceState(onVal===target ? target : off);
+      }
+      return;
+    }
+    console.warn("setRadio: field not found:",name);
+  }catch(e){ console.warn("setRadio failed:",name,value,e.message); }
+};
+const setCheck = (form,name,checked) => {
+  // Use acroField.setValue so the correct on-value is used regardless
+  // of what pdf-lib's check() defaults to.
+  try {
+    const { PDFName } = window.PDFLib;
+    const fields = form.getFields();
+    for(const f of fields){
+      if(f.getName()===name){
+        if(checked){
+          const onVal = f.acroField.getOnValue() ?? PDFName.of('Yes');
+          f.acroField.setValue(onVal);
+        } else {
+          f.acroField.setValue(PDFName.of('Off'));
+        }
+        return;
+      }
+    }
+    console.warn("setCheck: field not found:",name);
+  } catch(e){ console.warn("setCheck failed:",name,e.message); }
+};
+
+// ── Shared UI components (defined OUTSIDE main component to prevent remounting) ──
+const ic = "w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-800 bg-white focus:outline-none focus:border-blue-800 focus:ring-1 focus:ring-blue-800 transition-colors";
+
+const InstructionBox = memo(({text}) => (
+  <div style={{background:"#fffbeb",borderLeft:`4px solid ${GOLD}`,borderRadius:"0 8px 8px 0"}} className="p-3 mb-5">
+    <div style={{color:GOLD}} className="text-xs font-bold uppercase tracking-widest mb-1">Attorney Note</div>
+    <div className="text-sm leading-relaxed" style={{color:"#7c5a1e"}}>{text}</div>
+  </div>
+));
+
+const SectionHeader = memo(({Icon,title}) => (
+  <div className="flex items-center gap-3 mb-5 pb-3 border-b border-slate-200">
+    <div style={{background:NAV_COLOR}} className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"><Icon size={15} color="white"/></div>
+    <h2 style={{fontFamily:"Georgia,serif",color:NAV_COLOR}} className="text-xl font-bold leading-tight">{title}</h2>
+  </div>
+));
+
+const Lbl = memo(({label,required,children}) => (
+  <div className="mb-4">
+    <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1.5">
+      {label}{required && <span className="text-red-500 ml-1">*</span>}
+    </label>
+    {children}
+  </div>
+));
+
+const Inp = memo(({value,onChange,placeholder,type="text",...r}) => (
+  <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} className={ic} {...r}/>
+));
+
+const Sel = memo(({value,onChange,children}) => (
+  <select value={value} onChange={e=>onChange(e.target.value)} className={ic}>{children}</select>
+));
+
+const Txt = memo(({value,onChange,placeholder,rows=5}) => (
+  <textarea value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder} rows={rows} className={`${ic} resize-none`}/>
+));
+
+const RadioGroup = memo(({options,value,onChange}) => (
+  <div className="space-y-2">
+    {options.map(o=>(
+      <label key={o.value} className="flex items-start gap-2.5 cursor-pointer">
+        <input type="radio" checked={value===o.value} onChange={()=>onChange(o.value)} className="mt-0.5 accent-blue-800 flex-shrink-0"/>
+        <span className="text-sm text-slate-700">{o.label}</span>
+      </label>
+    ))}
+  </div>
+));
+
+const SummaryCard = memo(({title,items,onEdit}) => (
+  <div className="border border-slate-200 rounded-xl overflow-hidden mb-3">
+    <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
+      <span className="text-xs font-bold text-slate-600 uppercase tracking-wide">{title}</span>
+      <button onClick={onEdit} className="text-xs font-bold text-blue-700 hover:underline">Edit</button>
+    </div>
+    <div className="px-4 py-3 space-y-1.5">
+      {items.filter(i=>i.value).map(({label,value})=>(
+        <div key={label} className="flex gap-2 text-sm">
+          <span className="text-slate-400 w-36 flex-shrink-0">{label}</span>
+          <span className="text-slate-800 font-medium">{value}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+));
+
+// BorrowerFields defined OUTSIDE main component
+const BorrowerFields = memo(({vals,onChange,isCoB}) => {
+  const set = useCallback((k,v) => onChange(k,v), [onChange]);
+  return (
+    <div>
+      <div className="grid grid-cols-3 gap-3">
+        <Lbl label="First Name" required><Inp value={vals.firstName} onChange={v=>set("firstName",v)} placeholder="First"/></Lbl>
+        <Lbl label="Middle Name"><Inp value={vals.middleName} onChange={v=>set("middleName",v)} placeholder="Middle"/></Lbl>
+        <Lbl label="Last Name" required><Inp value={vals.lastName} onChange={v=>set("lastName",v)} placeholder="Last"/></Lbl>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <Lbl label="Social Security Number" required><Inp value={vals.ssn} onChange={v=>set("ssn",v)} placeholder="XXX-XX-XXXX"/></Lbl>
+        <Lbl label="Date of Birth" required><Inp type="date" value={vals.dob} onChange={v=>set("dob",v)}/></Lbl>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <Lbl label="Primary Phone Number" required>
+          <Inp value={vals.primaryPhone} onChange={v=>set("primaryPhone",v)} placeholder="(321) 555-0000"/>
+        </Lbl>
+        <Lbl label="Primary Phone Type" required>
+          <Sel value={vals.primaryPhoneType} onChange={v=>set("primaryPhoneType",v)}>
+            <option value="cell">Cell</option>
+            <option value="home">Home</option>
+            <option value="work">Work</option>
+            <option value="other">Other</option>
+          </Sel>
+        </Lbl>
+        <Lbl label="Alternate Phone Number">
+          <Inp value={vals.alternatePhone} onChange={v=>set("alternatePhone",v)} placeholder="(321) 555-0000"/>
+        </Lbl>
+        <Lbl label="Alternate Phone Type">
+          <Sel value={vals.alternatePhoneType} onChange={v=>set("alternatePhoneType",v)}>
+            <option value="cell">Cell</option>
+            <option value="home">Home</option>
+            <option value="work">Work</option>
+            <option value="other">Other</option>
+          </Sel>
+        </Lbl>
+        <Lbl label="Email Address"><Inp type="email" value={vals.email} onChange={v=>set("email",v)} placeholder="email@example.com"/></Lbl>
+      </div>
+      <Lbl label="Preferred Contact Method">
+        <Sel value={vals.preferredContact} onChange={v=>set("preferredContact",v)}>
+          <option value="cell">Cell Phone</option>
+          <option value="home">Home Phone</option>
+          <option value="work">Work Phone</option>
+          <option value="email">Email</option>
+        </Sel>
+      </Lbl>
+      {!isCoB && (<>
+        <div className="mt-1 mb-3 text-xs font-bold text-slate-500 uppercase tracking-wide border-t border-slate-200 pt-3">Mailing Address (if different from property)</div>
+        <Lbl label="Street Address"><Inp value={vals.mailingAddress} onChange={v=>set("mailingAddress",v)} placeholder="Leave blank if same as property"/></Lbl>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="col-span-1"><Lbl label="City"><Inp value={vals.mailingCity} onChange={v=>set("mailingCity",v)} placeholder="City"/></Lbl></div>
+          <Lbl label="State"><Inp value={vals.mailingState} onChange={v=>set("mailingState",v)} placeholder="FL"/></Lbl>
+          <Lbl label="ZIP"><Inp value={vals.mailingZip} onChange={v=>set("mailingZip",v)} placeholder="XXXXX"/></Lbl>
+        </div>
+      </>)}
+      <Lbl label="Primary Language"><Inp value={vals.primaryLanguage} onChange={v=>set("primaryLanguage",v)} placeholder="English"/></Lbl>
+    </div>
+  );
+});
+
+// IncomeBlock defined OUTSIDE main component
+const IncomeBlock = memo(({label,vals,onChange}) => {
+  const set = useCallback((k,v) => onChange(k,v), [onChange]);
+  return (
+    <div>
+      <div className="text-sm font-bold text-slate-700 mb-2">{label}</div>
+      <div className="text-xs text-slate-500 italic mb-3">Enter gross monthly amounts (before taxes)</div>
+      <div className="grid grid-cols-2 gap-3">
+        {[{k:"grossWages",l:"Gross Monthly Wages"},{k:"selfEmploy",l:"Self-Employment Income"},{k:"unemploy",l:"Unemployment Benefit Income"},{k:"taxableSSI",l:"Taxable Social Security, Pension, Disability, or Public Assistance"},{k:"nontaxableSSI",l:"Non-Taxable Social Security or Disability Income"},{k:"rental",l:"Net Rental Income"},{k:"investment",l:"Investment or Insurance Income"}].map(({k,l})=>(
+          <Lbl key={k} label={l}><Inp type="number" value={vals[k]} onChange={v=>set(k,v)} placeholder="$0.00"/></Lbl>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <Lbl label="Other Income (alimony, child support, etc.)"><Inp type="number" value={vals.other} onChange={v=>set("other",v)} placeholder="$0.00"/></Lbl>
+        <Lbl label="Describe Other Sources"><Inp value={vals.otherDesc} onChange={v=>set("otherDesc",v)} placeholder="e.g., rental, annuity, pension"/></Lbl>
+      </div>
+    </div>
+  );
+});
+
+// ── Main component ────────────────────────────────────────────────────────────
+function UBAForm() {
+  const [step,setStep]       = useState(1);
+  const [data,setData]       = useState(INIT);
+  const [submitted,setSubmitted] = useState(false);
+  const [loading,setLoading] = useState(false);
+  const [error,setError]     = useState("");
+  const [pdfReady,setPdfReady] = useState(false);
+  const [validErr,setValidErr] = useState("");
+  const fileRef = useRef();
+  const topRef  = useRef();
+
+  useEffect(()=>{ topRef.current?.scrollIntoView({behavior:"smooth"}); },[step]);
+
+  // Load pdf-lib
+  useEffect(()=>{
+    if(window.PDFLib){setPdfReady(true);return;}
+    const s=document.createElement("script");
+    s.src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js";
+    s.onload=()=>setPdfReady(true);
+    s.onerror=()=>setError("Could not load PDF library.");
+    document.head.appendChild(s);
+  },[]);
+
+  // Load EmailJS
+  useEffect(()=>{
+    if(window.emailjs)return;
+    const s=document.createElement("script");
+    s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+    s.onload=()=>{ window.emailjs.init({publicKey:"bsMF-SFkSVng-GvCQ"}); };
+    document.head.appendChild(s);
+  },[]);
+
+  // ── Setters using useCallback to prevent child remounts ────────────────────
+  const setSection = useCallback((section,key,val) => {
+    setData(d=>({...d,[section]:{...d[section],[key]:val}}));
+  },[]);
+
+  const setTopLevel = useCallback((key,val) => {
+    setData(d=>({...d,[key]:val}));
+  },[]);
+
+  const setBorrower   = useCallback((k,v)=>setSection("borrower",k,v),[setSection]);
+  const setCoBorrower = useCallback((k,v)=>setSection("coBorrower",k,v),[setSection]);
+  const setProperty   = useCallback((k,v)=>setSection("property",k,v),[setSection]);
+  const setHardship   = useCallback((k,v)=>setSection("hardship",k,v),[setSection]);
+  const setBIncome    = useCallback((k,v)=>setSection("bIncome",k,v),[setSection]);
+  const setCIncome    = useCallback((k,v)=>setSection("cIncome",k,v),[setSection]);
+  const setExpenses   = useCallback((k,v)=>setSection("expenses",k,v),[setSection]);
+  const setAssets     = useCallback((k,v)=>setSection("assets",k,v),[setSection]);
+
+  const toggleHardship = useCallback(t=>{
+    setData(d=>{
+      const types=d.hardship.types.includes(t)?d.hardship.types.filter(x=>x!==t):[...d.hardship.types,t];
+      return {...d,hardship:{...d.hardship,types}};
+    });
+  },[]);
+
+  const addFiles = useCallback(files=>{
+    const list=Array.from(files).map(f=>({name:f.name,size:f.size}));
+    setData(d=>({...d,files:[...d.files,...list]}));
+  },[]);
+
+  const removeFile = useCallback(i=>{
+    setData(d=>({...d,files:d.files.filter((_,idx)=>idx!==i)}));
+  },[]);
+
+  // ── Computed totals ────────────────────────────────────────────────────────
+  const validateStep = (s) => {
+    const b=data.borrower, p=data.property, h=data.hardship;
+    switch(s){
+      case 1:
+        if(!data.servicer) return "Please select your mortgage servicer.";
+        break;
+      case 2:{
+        const miss=[];
+        if(!b.firstName) miss.push("First Name");
+        if(!b.lastName) miss.push("Last Name");
+        if(!b.ssn) miss.push("Social Security Number");
+        if(!b.primaryPhone) miss.push("Primary Phone Number");
+        if(miss.length) return "Please complete: "+miss.join(", ")+".";
+        break;
+      }
+      case 4:{
+        const miss=[];
+        if(!p.address) miss.push("Street Address");
+        if(!p.city) miss.push("City");
+        if(!p.zip) miss.push("ZIP");
+        if(!p.loanNumber) miss.push("Loan Number");
+        if(miss.length) return "Please complete: "+miss.join(", ")+".";
+        break;
+      }
+      case 5:{
+        const miss=[];
+        if(!h.types||h.types.length===0) miss.push("at least one hardship type");
+        if(!h.date) miss.push("Hardship Start Date");
+        if(!h.explanation||h.explanation.trim().length<20) miss.push("Hardship Explanation (minimum 20 characters)");
+        if(miss.length) return "Please complete: "+miss.join(", ")+".";
+        break;
+      }
+    }
+    return null;
+  };
+
+  const sumI = inc => ["grossWages","selfEmploy","unemploy","taxableSSI","nontaxableSSI","rental","investment","other"].reduce((s,k)=>s+(parseFloat(inc[k])||0),0);
+  const totalIncome  = () => sumI(data.bIncome)+(data.hasCoBorrower?sumI(data.cIncome):0);
+  const totalExpense = () => Object.values(data.expenses).reduce((s,v)=>s+(parseFloat(v)||0),0);
+  const totalAssets  = () => Object.values(data.assets).reduce((s,v)=>s+(parseFloat(v)||0),0);
+  const fmt = n => n.toLocaleString("en-US",{minimumFractionDigits:2});
+  const svc = SERVICERS.find(s=>s.name===data.servicer);
+  const combined = (key) => fmtMoney((parseFloat(data.bIncome[key]||0))+(data.hasCoBorrower?parseFloat(data.cIncome[key]||0):0));
+
+  // ── Email submit ───────────────────────────────────────────────────────────
+  const handleSubmit = async () => {
+    if(!window.emailjs){setError("Email service not loaded yet. Please wait and try again.");return;}
+    // Validate all critical steps before submitting
+    const criticalSteps = [1,2,4,5];
+    for(const s of criticalSteps){
+      const err = validateStep(s);
+      if(err){ setError("Cannot submit: Step "+s+" incomplete. "+err); return; }
+    }
+    setLoading(true); setError("");
+    try {
+      const b=data.borrower, p=data.property, h=data.hardship;
+      const bName=[b.firstName,b.middleName,b.lastName].filter(Boolean).join(" ");
+      const propAddr=[p.address,p.city,p.state,p.zip].filter(Boolean).join(", ");
+      const surplus=totalIncome()-totalExpense();
+      await window.emailjs.send("service_1m5olao","a3c13qe",{
+        borrower_name:    bName||"Not provided",
+        servicer:         data.servicer||"Not selected",
+        property_address: propAddr||"Not provided",
+        loan_number:      p.loanNumber||"Not provided",
+        goal:             h.goal||"Not provided",
+        hardship_types:   (h.types||[]).join(", ")||"None selected",
+        hardship_date:    h.date||"Not provided",
+        total_income:     "$"+fmt(totalIncome()),
+        total_expenses:   "$"+fmt(totalExpense()),
+        surplus:          (surplus>=0?"+":"")+"$"+fmt(Math.abs(surplus))+(surplus<0?" (deficit)":""),
+        total_assets:     "$"+fmt(totalAssets()),
+        hardship_explanation: h.explanation||"Not provided",
+        files_list:       data.files.length>0?data.files.map(f=>f.name).join(", "):"None uploaded",
+      });
+      setSubmitted(true);
+    } catch(e){
+      setError("Submission failed: "+e.message+". Please email bbowin2016@gmail.com.");
+    } finally { setLoading(false); }
+  };
+
+  // ── PDF generation ─────────────────────────────────────────────────────────
+  const handleGeneratePDF = async () => {
+    if(!pdfReady||!window.PDFLib){setError("PDF library not loaded. Please wait and try again.");return;}
+    setLoading(true); setError("");
+    try {
+      const {PDFDocument}=window.PDFLib;
+      const pdfBytes=Uint8Array.from(atob(FORM710_B64),c=>c.charCodeAt(0));
+      const pdfDoc=await PDFDocument.load(pdfBytes,{ignoreEncryption:true});
+      const form=pdfDoc.getForm();
+
+      const b=data.borrower,c=data.coBorrower,p=data.property,h=data.hardship,as=data.assets;
+      const bName=[b.firstName,b.middleName,b.lastName].filter(Boolean).join(" ");
+      const cName=[c.firstName,c.middleName,c.lastName].filter(Boolean).join(" ");
+      const propAddr=[p.address,p.city,p.state,p.zip].filter(Boolean).join(", ");
+      const mailAddr=[b.mailingAddress,b.mailingCity,b.mailingState,b.mailingZip].filter(Boolean).join(", ");
+      const pref=(b.preferredContact||"cell").toLowerCase();
+      // primaryPhoneType used for phone check1, alternatePhoneType for phone check2
+      const occ=p.occupancy||"primary";
+      const ht=h.types||[];
+      const dur=h.resolved?"3":(h.duration==="long"?"2":"1");
+      const PHONE={"cell":"1","home":"2","work":"3","other":"4","email":"4"};
+      const PREF={"cell":"1","home":"2","work":"3","email":"4","text":"5"};
+      const PT={"primary":"1","second":"2","investment":"3","vacant":"3"};
+      const OC={"owner":"1","renter":"2","vacant":"3"};
+      const GL={"keep":"1","sell":"2","transfer":"3","undecided":"4"};
+      // Page 1
+      setTextField(form,"Text1",p.loanNumber);
+      setTextField(form,"Borrowers name",bName);
+      setTextField(form,"Social Security Number last 4 digits",(b.ssn||"").slice(-4));
+      setTextField(form,"email address",b.email);
+      setTextField(form,"primary phone number",b.primaryPhone);
+      if(b.alternatePhone) setTextField(form,"Alternate phone number",b.alternatePhone);
+      setRadio(form,"phone check1",PHONE[b.primaryPhoneType]||"1");
+      if(b.alternatePhone) setRadio(form,"phone check2",PHONE[b.alternatePhoneType||"cell"]||"1");
+      setRadio(form,"phone check5",PREF[pref]||"1");
+      setRadio(form,"military checkbox",h.military?"1":"2");
+      setTextField(form,"Property Address",propAddr);
+      if(mailAddr) setTextField(form,"Mailing address if different from property address",mailAddr);
+      setRadio(form,"property checkbox1",PT[occ]||"1");
+      setRadio(form,"property checkbox2",OC[p.occupancyStatus||"owner"]||"1");
+      setRadio(form,"property checkbox3",GL[h.goal]||"1");
+      setRadio(form,"property checkbox4",p.forSale?"1":"2");
+      if(p.forSale&&p.listingAgent) setTextField(form,"sale by owner if applicable",p.listingAgent);
+      setRadio(form,"property checkbox5",p.hasHOA?"1":"2");
+      if(p.hasHOA&&p.hoaMonthly) setTextField(form,"undefined",fmtMoney(p.hoaMonthly));
+      if(data.hasCoBorrower){
+        setTextField(form,"Coborrowers name",cName);
+        setTextField(form,"Social Security Number last 4 digits_2",(c.ssn||"").slice(-4));
+        setTextField(form,"email address2",c.email);
+        setTextField(form,"primary phone number2",c.primaryPhone);
+        if(c.alternatePhone) setTextField(form,"Alternate phone number2",c.alternatePhone);
+        setRadio(form,"phone check3",PHONE[c.primaryPhoneType]||"1");
+        if(c.alternatePhone) setRadio(form,"phone check4",PHONE[c.alternatePhoneType||"cell"]||"1");
+      }
+      // Page 2
+      setTextField(form,"The hardship causing mortgage payment challenges began on approximately date",fmtDate(h.date));
+      if(h.resolved&&h.resolvedDate) setTextField(form,"undefined_2",fmtDate(h.resolvedDate));
+      setRadio(form,"hardship checkbox",dur);
+      ht.forEach(t=>{ const fn=HARDSHIP_FIELD_MAP[t]; if(fn) setCheck(form,fn,true); });
+      if(h.explanation){ setTextField(form,"1",h.explanation.slice(0,500)); setCheck(form,"other checkbox",true); }
+      // Page 3
+      setTextField(form,"amount1",combined("grossWages"));
+      setTextField(form,"amount2",combined("selfEmploy"));
+      setTextField(form,"amount3",combined("unemploy"));
+      setTextField(form,"amount4",combined("taxableSSI"));
+      setTextField(form,"amount5",combined("nontaxableSSI"));
+      setTextField(form,"amount6",combined("rental"));
+      setTextField(form,"amount7",combined("investment"));
+      setTextField(form,"amount8",combined("other"));
+      setTextField(form,"amount9",fmtMoney(as.checking));
+      setTextField(form,"amount10",fmtMoney(String(parseFloat(as.savings||0)+parseFloat(as.cds||0))));
+      setTextField(form,"amount11",fmtMoney(as.stocks));
+      setTextField(form,"amount12",fmtMoney(as.other));
+      // Page 4
+      const today=new Date().toLocaleDateString("en-US");
+      setTextField(form,"Date",today);
+      if(data.hasCoBorrower) setTextField(form,"Date_2",today);
+      const filledBytes=await pdfDoc.save();
+      // Convert to base64 data URL for maximum browser/sandbox compatibility
+      const uint8 = new Uint8Array(filledBytes);
+      // Chunked base64 conversion to avoid call stack limits
+      let binary = ""; const chunk = 8192;
+      for(let i=0;i<uint8.length;i+=chunk){
+        binary += String.fromCharCode(...uint8.subarray(i, Math.min(i+chunk, uint8.length)));
+      }
+      const base64pdf = btoa(binary);
+      const dataUrl = "data:application/pdf;base64," + base64pdf;
+      const a=document.createElement("a");
+      a.href=dataUrl;
+      a.download=`Form710_${b.lastName||"Client"}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch(e){
+      setError("PDF generation failed: "+e.message);
+    } finally { setLoading(false); }
+  };
+
+
+  // ── Validation ────────────────────────────────────────────────────────────
+  const validateStep = (s) => {
+    const b = data.borrower, p = data.property, h = data.hardship;
+    switch(s){
+      case 1:
+        if(!data.servicer) return "Please select your mortgage servicer.";
+        return null;
+      case 2: {
+        const miss=[];
+        if(!b.firstName) miss.push("First Name");
+        if(!b.lastName) miss.push("Last Name");
+        if(!b.ssn) miss.push("Social Security Number");
+        if(!b.primaryPhone) miss.push("Primary Phone Number");
+        return miss.length ? "Please complete: "+miss.join(", ")+"." : null;
+      }
+      case 3:
+        return null; // co-borrower defaults to No, always valid
+      case 4: {
+        const miss=[];
+        if(!p.address) miss.push("Street Address");
+        if(!p.city) miss.push("City");
+        if(!p.zip) miss.push("ZIP Code");
+        if(!p.loanNumber) miss.push("Mortgage Loan Number");
+        return miss.length ? "Please complete: "+miss.join(", ")+"." : null;
+      }
+      case 5: {
+        const miss=[];
+        if(!h.types||h.types.length===0) miss.push("Cause of hardship (select at least one)");
+        if(!h.date) miss.push("Hardship start date");
+        if(!h.explanation||h.explanation.trim().length<20) miss.push("Hardship explanation (please provide more detail)");
+        return miss.length ? "Please complete: "+miss.join(", ")+"." : null;
+      }
+      default:
+        return null;
+    }
+  };
+
+  // ── Step renders ───────────────────────────────────────────────────────────
+  const renderStep = () => {
+    switch(step) {
+
+      case 1: return (
+        <div>
+          <div style={{background:NAV_COLOR,borderRadius:"12px"}} className="p-5 mb-6 text-white">
+            <div style={{color:GOLD}} className="text-xs font-bold uppercase tracking-widest mb-3">Why I Built This</div>
+            <p className="text-sm leading-relaxed mb-3">My name is Beau Bowin. I am a Florida licensed attorney and the founder of Bowin Law Group in Melbourne, Florida. Over the past 17 years I have helped more than 10,000 Brevard County families navigate bankruptcy and foreclosure. In that time I have watched servicers lose documents, delay reviews, and deny modifications on technicalities, often because the application was incomplete or the hardship explanation was too vague to take seriously.</p>
+            <p className="text-sm leading-relaxed mb-3" style={{color:GOLD,fontStyle:"italic",fontFamily:"Georgia,serif",fontSize:"15px"}}>I built this tool because I was tired of watching that happen to my clients.</p>
+            <p className="text-sm leading-relaxed mb-3">This questionnaire walks you through every section of the Uniform Borrower Assistance Form, the standard mortgage modification application used by Fannie Mae, Freddie Mac, and most major servicers. Each section includes my personal guidance on what servicers actually look for and what language gets applications approved versus ignored. When you finish, a completed Form 710 is generated automatically and sent to my office. I review it, and I submit it to your servicer on your behalf.</p>
+            <p className="text-sm leading-relaxed mb-3">You are not doing this alone. Your information is transmitted securely and goes only to Bowin Law Group. Nothing is sent to your servicer without my review first.</p>
+            <p className="text-sm" style={{color:"#93b4d8"}}>Questions before you start? Email us at <strong style={{color:"white"}}>bbowin2016@gmail.com</strong>.</p>
+          </div>
+          <SectionHeader Icon={Building2} title="Loan Servicer"/>
+          <InstructionBox text="Your servicer is the company you send your monthly mortgage payment to. It appears on your most recent mortgage statement. This is not always the bank that originally gave you the loan. Loans are frequently sold and transferred to other servicers."/>
+          <Lbl label="Who is your mortgage servicer?" required>
+            <Sel value={data.servicer} onChange={v=>setTopLevel("servicer",v)}>
+              <option value="">Select your servicer</option>
+              {SERVICERS.map(s=><option key={s.name} value={s.name}>{s.name}</option>)}
+            </Sel>
+          </Lbl>
+          {svc && (
+            <div style={{background:"#eef3fb",border:"1px solid #c2d0e8"}} className="rounded-xl p-4 mt-1">
+              <div style={{color:NAV_COLOR}} className="text-xs font-bold uppercase tracking-widest mb-2">Submission Info, Attorney Reference</div>
+              <div className="space-y-1 text-sm text-slate-700">
+                <div><span className="font-semibold">Method:</span> {svc.method}</div>
+                {svc.fax    && <div><span className="font-semibold">Fax:</span> {svc.fax}</div>}
+                {svc.email  && <div><span className="font-semibold">Email:</span> {svc.email}</div>}
+                {svc.portal && <div><span className="font-semibold">Portal:</span> {svc.portal}</div>}
+                {svc.phone  && <div><span className="font-semibold">Phone:</span> {svc.phone}</div>}
+                {svc.mail   && <div><span className="font-semibold">Mail:</span> {svc.mail}</div>}
+                {svc.notes  && <div className="text-slate-500 italic mt-1">{svc.notes}</div>}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+
+      case 2: return (
+        <div>
+          <SectionHeader Icon={User} title="Borrower Information"/>
+          <InstructionBox text="Use your full legal name exactly as it appears on your mortgage documents. Your Social Security Number is required by the servicer to locate your loan account. All information is transmitted securely to Bowin Law Group only. Nothing is shared with your servicer until I review it first."/>
+          <BorrowerFields vals={data.borrower} onChange={setBorrower} isCoB={false}/>
+        </div>
+      );
+
+      case 3: return (
+        <div>
+          <SectionHeader Icon={Users} title="Co-Borrower Information"/>
+          <InstructionBox text="A co-borrower is any person whose name appears on the mortgage note alongside yours, most commonly a spouse or co-owner. If you are unsure, check your most recent mortgage statement. All borrowers on the loan will be listed on it. If there is no co-borrower, select No below."/>
+          <Lbl label="Is there a co-borrower on this loan?" required>
+            <RadioGroup
+              value={data.hasCoBorrower?"yes":"no"}
+              onChange={v=>setTopLevel("hasCoBorrower",v==="yes")}
+              options={[{value:"yes",label:"Yes, there is a co-borrower"},{value:"no",label:"No, I am the only borrower"}]}
+            />
+          </Lbl>
+          {data.hasCoBorrower && (
+            <div className="mt-4 pt-4 border-t border-slate-200">
+              <BorrowerFields vals={data.coBorrower} onChange={setCoBorrower} isCoB={true}/>
+            </div>
+          )}
+        </div>
+      );
+
+      case 4: return (
+        <div>
+          <SectionHeader Icon={Home} title="Property and Loan Information"/>
+          <InstructionBox text="Enter the address of the property that secures this mortgage, the home you are trying to save. Your mortgage loan number appears on your monthly statement or in your servicer's online account portal. For an estimated property value, go to www.zillow.com and enter your property address. The Zestimate shown is a reasonable estimate for this purpose. It does not need to be exact."/>
+          <Lbl label="Property Street Address" required><Inp value={data.property.address} onChange={v=>setProperty("address",v)} placeholder="Street address"/></Lbl>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="col-span-1"><Lbl label="City" required><Inp value={data.property.city} onChange={v=>setProperty("city",v)} placeholder="Melbourne"/></Lbl></div>
+            <Lbl label="State" required><Inp value={data.property.state} onChange={v=>setProperty("state",v)} placeholder="FL"/></Lbl>
+            <Lbl label="ZIP" required><Inp value={data.property.zip} onChange={v=>setProperty("zip",v)} placeholder="XXXXX"/></Lbl>
+          </div>
+          <Lbl label="How is the property currently used?" required>
+            <Sel value={data.property.occupancy} onChange={v=>setProperty("occupancy",v)}>
+              <option value="primary">Primary Residence (I live here)</option>
+              <option value="second">Second Home or Vacation Home</option>
+              <option value="investment">Investment or Rental Property</option>
+              <option value="vacant">Vacant</option>
+            </Sel>
+          </Lbl>
+          <Lbl label="Current occupancy status?" required>
+            <Sel value={data.property.occupancyStatus} onChange={v=>setProperty("occupancyStatus",v)}>
+              <option value="owner">Owner occupied (I live here or it is my second home)</option>
+              <option value="renter">Renter occupied (a tenant lives here)</option>
+              <option value="vacant">Vacant (no one is currently living here)</option>
+            </Sel>
+          </Lbl>
+          <Lbl label="Listed for sale?">
+            <RadioGroup value={data.property.forSale?"yes":"no"} onChange={v=>setProperty("forSale",v==="yes")} options={[{value:"yes",label:"Yes"},{value:"no",label:"No"}]}/>
+          </Lbl>
+          {data.property.forSale && <Lbl label="Listing Agent Name and Phone"><Inp value={data.property.listingAgent} onChange={v=>setProperty("listingAgent",v)} placeholder="Agent name and phone"/></Lbl>}
+          <Lbl label="Subject to HOA?">
+            <RadioGroup value={data.property.hasHOA?"yes":"no"} onChange={v=>setProperty("hasHOA",v==="yes")} options={[{value:"yes",label:"Yes"},{value:"no",label:"No"}]}/>
+          </Lbl>
+          {data.property.hasHOA && <Lbl label="Monthly HOA Fee"><Inp type="number" value={data.property.hoaMonthly} onChange={v=>setProperty("hoaMonthly",v)} placeholder="$0.00"/></Lbl>}
+          <Lbl label="Mortgage Loan Number" required><Inp value={data.property.loanNumber} onChange={v=>setProperty("loanNumber",v)} placeholder="As shown on your statement"/></Lbl>
+          <div className="grid grid-cols-2 gap-3">
+            <Lbl label="Estimated Property Value"><Inp type="number" value={data.property.estimatedValue} onChange={v=>setProperty("estimatedValue",v)} placeholder="$0.00"/></Lbl>
+            <Lbl label="Unpaid Principal Balance"><Inp type="number" value={data.property.unpaidBalance} onChange={v=>setProperty("unpaidBalance",v)} placeholder="$0.00"/></Lbl>
+          </div>
+        </div>
+      );
+
+      case 5: return (
+        <div>
+          <SectionHeader Icon={AlertTriangle} title="Hardship Information"/>
+          <InstructionBox text="The most successful hardship letters describe a temporary setback, not a permanent financial collapse. If you are behind on your mortgage, your explanation should describe what happened, when it happened, and why your situation is improving or has stabilized. The servicer is not just asking why you fell behind. They are also asking whether a modified payment would actually help. Your explanation needs to answer both questions. Show that the hardship put you in a hole, and show that a reasonable modified payment gets you out of it."/>
+          <Lbl label="Your goal for this property?" required>
+            <Sel value={data.hardship.goal} onChange={v=>setHardship("goal",v)}>
+              <option value="keep">Keep the property (I want to stay in my home)</option>
+              <option value="sell">Sell the property</option>
+              <option value="transfer">Transfer ownership to the servicer</option>
+              <option value="undecided">Undecided</option>
+            </Sel>
+          </Lbl>
+          <Lbl label="Cause of hardship (select all that apply)" required>
+            <div className="space-y-1.5 mt-1">
+              {HARDSHIP_TYPES.map(t=>(
+                <label key={t} className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-all">
+                  <input type="checkbox" checked={data.hardship.types.includes(t)} onChange={()=>toggleHardship(t)} className="w-4 h-4 accent-blue-800 flex-shrink-0"/>
+                  <span className="text-sm text-slate-700">{t}</span>
+                </label>
+              ))}
+            </div>
+          </Lbl>
+          <Lbl label="How long do you expect the hardship to last?" required>
+            <RadioGroup
+              value={data.hardship.resolved?"resolved":data.hardship.duration}
+              onChange={v=>{
+                if(v==="resolved"){ setHardship("resolved",true); setHardship("duration","short"); }
+                else { setHardship("resolved",false); setHardship("duration",v); }
+              }}
+              options={[
+                {value:"short",label:"Short-term (up to 6 months, I expect my situation to improve)"},
+                {value:"long",label:"Long-term or permanent (greater than 6 months)"},
+                {value:"resolved",label:"Resolved (the hardship has ended)"}
+              ]}
+            />
+          </Lbl>
+          {data.hardship.resolved && (
+            <Lbl label="Date hardship was resolved">
+              <Inp type="date" value={data.hardship.resolvedDate} onChange={v=>setHardship("resolvedDate",v)}/>
+            </Lbl>
+          )}
+          <Lbl label="Approximate date hardship began" required>
+            <Inp type="date" value={data.hardship.date} onChange={v=>setHardship("date",v)}/>
+          </Lbl>
+          <Lbl label="Explain your hardship in your own words" required>
+            <InstructionBox text="Write 3 to 5 sentences. Include specific dates, dollar amounts, and real events. Describe what happened, when it happened, how it reduced your income or increased your expenses, and what has changed or is changing going forward. This text fills directly into the Form 710 and is one of the first things the servicer reads."/>
+            <Txt value={data.hardship.explanation} onChange={v=>setHardship("explanation",v)} placeholder="Describe what happened, when it happened, and how it affected your ability to make payments..." rows={6}/>
+          </Lbl>
+
+          <Lbl label="Active military duty?">
+            <RadioGroup value={data.hardship.military?"yes":"no"} onChange={v=>setHardship("military",v==="yes")}
+              options={[{value:"yes",label:"Yes"},{value:"no",label:"No"}]}/>
+          </Lbl>
+        </div>
+      );
+
+      case 6: return (
+        <div>
+          <SectionHeader Icon={DollarSign} title="Monthly Income"/>
+          <InstructionBox text="Before you enter a single number, read this. The income and expense sections exist to show your servicer one thing: why you cannot afford your current payment, and whether a modified payment would help. Be accurate. Do not underestimate your monthly expenses. If your numbers make it look like you have $800 left over every month, the servicer will wonder why you need help. Do not exaggerate them either. If your expenses exceed your income by a large amount every month, the servicer may conclude that even a modified payment would be unaffordable, making a modification pointless from their perspective. Most successful modification applicants land right around break-even. A small monthly shortfall shows exactly what it needs to show: that your current payment is the problem, not your overall financial situation. If a reduced payment would make you whole, that is the story these numbers need to tell. Take your time. If the totals do not look right when you finish, go back and check your figures before submitting."/>
+          <IncomeBlock label="Borrower Income" vals={data.bIncome} onChange={setBIncome}/>
+          {data.hasCoBorrower && (
+            <div className="mt-6 pt-6 border-t border-slate-200">
+              <IncomeBlock label="Co-Borrower Income" vals={data.cIncome} onChange={setCIncome}/>
+            </div>
+          )}
+          <div style={{background:"#f0faf4",border:"1px solid #a7d9b8"}} className="mt-3 rounded-xl p-3 text-sm">
+            <span className="font-semibold text-slate-700">Total Monthly Income: </span>
+            <span className="font-bold text-green-700">${fmt(totalIncome())}</span>
+          </div>
+        </div>
+      );
+
+      case 7: return (
+        <div>
+          <SectionHeader Icon={ClipboardList} title="Monthly Expenses"/>
+          <InstructionBox text="Keep the guidance from the previous step in mind as you complete this section. Income and expenses tell one story together. For credit cards, enter the minimum monthly payment due, not the total balance. For your first mortgage payment, enter your total monthly payment as shown on your statement. If your taxes and insurance are escrowed, that amount already includes them and you should leave the separate tax and insurance fields below blank. If you pay taxes and insurance separately outside of your mortgage payment, enter only the principal and interest in the mortgage field and then enter taxes and insurance in their own fields below. Every housing cost should appear somewhere, but never in two places."/>
+          <div className="grid grid-cols-2 gap-3">
+            {[{k:"firstMortgage",l:"First Mortgage Payment"},{k:"secondMortgage",l:"Second Mortgage / HELOC"},{k:"hoaDues",l:"HOA Dues"},{k:"taxes",l:"Property Taxes (if not escrowed)"},{k:"insurance",l:"Insurance (if not escrowed)"},{k:"creditCards",l:"Credit Card Min. Payments"},{k:"installments",l:"Auto / Student / Other Loans"},{k:"alimonyOut",l:"Alimony / Child Support Paid"},{k:"other",l:"Other Monthly Obligations (see note)"}].map(({k,l})=>(
+              <Lbl key={k} label={l}><Inp type="number" value={data.expenses[k]} onChange={v=>setExpenses(k,v)} placeholder="$0.00"/></Lbl>
+            ))}
+          </div>
+          <div style={{background:"#fdf2f2",border:"1px solid #f0b8b8"}} className="mt-2 rounded-xl p-3 text-sm">
+            <span className="font-semibold text-slate-700">Total Monthly Expenses: </span>
+            <span className="font-bold text-red-600">${fmt(totalExpense())}</span>
+          </div>
+          <InstructionBox text="For Other Monthly Obligations, examples include: childcare or daycare costs, medical expenses you pay regularly out of pocket, prescription medications, storage unit fees, subscriptions or memberships you cannot cancel, out-of-pocket costs related to your hardship, or any other fixed monthly cost not captured above."/>
+        </div>
+      );
+
+      case 8: return (
+        <div>
+          <SectionHeader Icon={Wallet} title="Assets"/>
+          <InstructionBox text="Enter your best estimate of the current balance for each account. Reasonable estimates are acceptable. Note: retirement accounts such as 401(k), IRA, and college savings accounts such as 529 plans are excluded from Form 710 and should not be included here. For Other Assets, examples include: a boat or RV, jewelry of significant value, a structured settlement or annuity payment, a life insurance policy with cash value, or any other asset of value not listed above. If you have none of these, leave that field blank."/>
+          <div className="grid grid-cols-2 gap-3">
+            {[{k:"checking",l:"Checking Account(s)"},{k:"savings",l:"Savings / Money Market"},{k:"cds",l:"Certificates of Deposit"},{k:"stocks",l:"Stocks / Bonds / Mutual Funds"},{k:"otherRE",l:"Other Real Estate (equity value)"},{k:"other",l:"Other Assets (see note above)"}].map(({k,l})=>(
+              <Lbl key={k} label={l}><Inp type="number" value={data.assets[k]} onChange={v=>setAssets(k,v)} placeholder="$0.00"/></Lbl>
+            ))}
+          </div>
+          <div style={{background:"#eef3fb",border:"1px solid #c2d0e8"}} className="mt-2 rounded-xl p-3 text-sm">
+            <span className="font-semibold text-slate-700">Total Disclosed Assets: </span>
+            <span className="font-bold text-blue-700">${fmt(totalAssets())}</span>
+          </div>
+        </div>
+      );
+
+      case 9: return (
+        <div>
+          <SectionHeader Icon={FileText} title="Supporting Documents"/>
+          <InstructionBox text="Upload your documents in PDF format whenever possible. If you only have a photo of a document, JPG or PNG are also accepted. Whatever format you use, make sure the image is clear, all text is readable, and no pages are cut off or blurry. Servicers will reject documents they cannot read. Include every page of every document you upload, even pages that appear blank. Bank statements often have a final page that looks empty but is part of the official statement. Tax returns include schedules that may seem irrelevant. Lenders review documents carefully and they know how many pages each document should have. A missing page does not look like an oversight. It looks like you are hiding something. When in doubt, include it."/>
+          <InstructionBox text="Keep saving your bank statements and pay stubs every month, even after you submit this application. Servicers routinely request updated documents as they review your file, sometimes weeks or months after the initial submission. Having current documents ready prevents delays and keeps your application moving forward."/>
+          <InstructionBox text="Keep a copy of everything you send to your servicer: every statement, every form, every letter. Also keep a written log of every phone call you have with your servicer: the date, the time, the name of the person you spoke with, and a summary of what was said. If your case ever proceeds to court, that log becomes evidence. Servicers have been known to lose documents and deny conversations that took place. Your records protect you."/>
+          <div className="mb-5">
+            <div className="text-xs font-bold text-slate-600 uppercase tracking-wide mb-3">Required Documents</div>
+            <div className="space-y-2">
+              {["Last 2 months pay stubs, all employed borrowers","Last 2 months bank statements, all accounts, all pages","Last 2 years federal tax returns, all pages, signed","Last 2 years W-2 and/or 1099 forms","If self-employed: current year-to-date profit and loss statement","Hardship documentation (termination letter, medical records, divorce decree, etc.)"].map((item,i)=>(
+                <div key={i} className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <div className="w-5 h-5 rounded border-2 border-slate-300 flex-shrink-0 mt-0.5"/>
+                  <span className="text-sm text-slate-700">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center cursor-pointer hover:border-slate-400 hover:bg-slate-50 transition-all"
+            onClick={()=>fileRef.current?.click()}
+            onDragOver={e=>e.preventDefault()}
+            onDrop={e=>{e.preventDefault();addFiles(e.dataTransfer.files);}}>
+            <Upload className="w-10 h-10 text-slate-300 mx-auto mb-3"/>
+            <div className="text-sm font-semibold text-slate-600">Click to select files or drag and drop</div>
+            <div className="text-xs text-slate-400 mt-1">PDF preferred. JPG and PNG also accepted. Max 20MB per file.</div>
+            <input ref={fileRef} type="file" multiple accept=".pdf,.jpg,.jpeg,.png" className="hidden" onChange={e=>addFiles(e.target.files)}/>
+          </div>
+          {data.files.length>0 && (
+            <div className="mt-4 space-y-2">
+              <div className="text-xs font-bold text-slate-600 uppercase tracking-wide">{data.files.length} file{data.files.length!==1?"s":""} attached</div>
+              {data.files.map((f,i)=>(
+                <div key={i} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <FileText size={16} className="text-slate-400"/>
+                    <div><div className="text-sm font-medium text-slate-700">{f.name}</div><div className="text-xs text-slate-400">{(f.size/1024).toFixed(1)} KB</div></div>
+                  </div>
+                  <button onClick={()=>removeFile(i)} className="text-slate-300 hover:text-red-500 transition-colors p-1"><X size={16}/></button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+
+      case 10: {
+        const bName=[data.borrower.firstName,data.borrower.middleName,data.borrower.lastName].filter(Boolean).join(" ");
+        const cName=[data.coBorrower.firstName,data.coBorrower.lastName].filter(Boolean).join(" ");
+        const surplus=totalIncome()-totalExpense();
+        return submitted ? (
+          <div className="text-center py-10">
+            <CheckCircle size={64} className="mx-auto mb-4" style={{color:"#2d8a4e"}}/>
+            <div className="text-xl font-bold text-slate-800 mb-2" style={{fontFamily:"Georgia,serif"}}>Application Submitted</div>
+            <div className="text-sm text-slate-600 mb-6 leading-relaxed">Your package has been sent to Bowin Law Group.<br/>Beau will contact you to confirm receipt and discuss next steps.</div>
+            <div className="text-xs text-slate-400">Bowin Law Group | bbowin2016@gmail.com</div>
+          </div>
+        ) : (
+          <div>
+            <SectionHeader Icon={Eye} title="Review and Submit"/>
+            <div style={{background:"#fffbeb",border:"1px solid #f0d090"}} className="rounded-xl p-4 mb-5">
+              <div className="text-sm font-semibold text-amber-800 mb-1">Please review before submitting</div>
+              <div className="text-sm text-amber-700">Once submitted, your package goes to Bowin Law Group. Beau will forward it to {data.servicer||"your servicer"}.</div>
+            </div>
+            <SummaryCard title="Servicer" onEdit={()=>setStep(1)} items={[{label:"Servicer",value:data.servicer},{label:"Method",value:svc?.method},{label:"Fax",value:svc?.fax}]}/>
+            <SummaryCard title="Borrower" onEdit={()=>setStep(2)} items={[{label:"Name",value:bName||""},{label:"SSN",value:data.borrower.ssn?"ending "+data.borrower.ssn.slice(-4):""},{label:"Primary Phone",value:data.borrower.primaryPhone},{label:"Alternate Phone",value:data.borrower.alternatePhone},{label:"Email",value:data.borrower.email}]}/>
+            {data.hasCoBorrower && <SummaryCard title="Co-Borrower" onEdit={()=>setStep(3)} items={[{label:"Name",value:cName},{label:"Cell",value:data.coBorrower.cellPhone}]}/>}
+            <SummaryCard title="Property" onEdit={()=>setStep(4)} items={[{label:"Address",value:[data.property.address,data.property.city,data.property.state,data.property.zip].filter(Boolean).join(", ")},{label:"Loan Number",value:data.property.loanNumber}]}/>
+            <SummaryCard title="Hardship" onEdit={()=>setStep(5)} items={[{label:"Goal",value:data.hardship.goal},{label:"Type(s)",value:data.hardship.types.join(", ")},{label:"Date",value:data.hardship.date}]}/>
+            <SummaryCard title="Financials" onEdit={()=>setStep(6)} items={[{label:"Income",value:"$"+fmt(totalIncome())},{label:"Expenses",value:"$"+fmt(totalExpense())},{label:"Surplus",value:(surplus>=0?"+":"")+"$"+fmt(Math.abs(surplus))+(surplus<0?" (deficit)":"")},{label:"Assets",value:"$"+fmt(totalAssets())}]}/>
+            <SummaryCard title="Documents" onEdit={()=>setStep(9)} items={[{label:"Files",value:data.files.length+" attached"}]}/>
+            {error && <div style={{background:"#fef2f2",border:"1px solid #fca5a5"}} className="mt-3 p-3 rounded-xl text-sm text-red-700">{error}</div>}
+            <div className="mt-5 space-y-3">
+              <button onClick={handleGeneratePDF} disabled={loading||!pdfReady}
+                className="w-full flex items-center justify-center gap-2 py-3.5 border border-slate-300 rounded-xl font-semibold text-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+                style={{color:NAV_COLOR}}>
+                <Printer size={16}/>
+                {loading?"Generating PDF...":!pdfReady?"Loading PDF library...":"Download Filled Form 710 PDF"}
+              </button>
+              <button onClick={()=>{
+                const steps=[1,2,4,5];
+                for(const s of steps){const e=validateStep(s);if(e){setValidErr("Step "+s+": "+e);return;}}
+                setValidErr("");handleSubmit();
+              }} disabled={loading}
+                style={{background:NAV_COLOR}}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50">
+                <CheckCircle size={16}/>{loading?"Sending...":"Submit to Bowin Law Group"}
+              </button>
+            </div>
+            <div className="mt-4 text-xs text-slate-400 text-center">Bowin Law Group | bbowin2016@gmail.com</div>
+          </div>
+        );
+      }
+
+      default: return null;
+    }
+  };
+
+  const pct = Math.round((step/STEPS.length)*100);
+
+  return (
+    <div className="min-h-screen" style={{background:"#eef0f4"}} ref={topRef}>
+      <div style={{background:NAV_COLOR}} className="px-4 pt-5 pb-4">
+        <div className="max-w-xl mx-auto">
+          <div style={{color:"#7fafd4"}} className="text-xs font-bold uppercase tracking-widest mb-1">Bowin Law Group</div>
+          <div className="text-xl font-bold text-white" style={{fontFamily:"Georgia,serif"}}>Mortgage Assistance Application</div>
+          <div style={{color:"#7fafd4"}} className="text-xs mt-1">Uniform Borrower Assistance Form, Fannie Mae Form 710</div>
+        </div>
+      </div>
+      <div className="bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-xl mx-auto">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-slate-400 font-medium">Step {step} of {STEPS.length}</span>
+            <span style={{color:NAV_COLOR}} className="text-xs font-bold">{STEPS[step-1].label}</span>
+          </div>
+          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+            <div style={{width:`${pct}%`,background:GOLD,transition:"width 0.35s ease"}} className="h-2 rounded-full"/>
+          </div>
+          <div className="flex items-center justify-between mt-2.5">
+            {STEPS.map(s=>{
+              const done=s.id<step, active=s.id===step;
+              return (
+                <button key={s.id} onClick={()=>{setValidErr("");setStep(s.id);}} title={s.label}
+                  className="w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center transition-all"
+                  style={{background:done?"#2d8a4e":active?NAV_COLOR:"#e2e8f0",color:done||active?"white":"#94a3b8"}}>
+                  {done?"✓":s.id}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="max-w-xl mx-auto px-4 py-5">
+
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-4">{renderStep()}</div>
+        {validErr && <div style={{background:"#fef2f2",border:"1px solid #fca5a5",borderRadius:"12px"}} className="p-3 mb-3 text-sm text-red-700 max-w-xl mx-auto px-4">{validErr}</div>}
+        {!submitted && (
+          <div className="flex gap-3">
+            {step>1 && <button onClick={()=>{setValidErr("");setStep(s=>s-1);}} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 border border-slate-300 bg-white rounded-xl text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-colors"><ChevronLeft size={16}/>Back</button>}
+            {step<STEPS.length && <button onClick={()=>{
+              const err=validateStep(step);
+              if(err){setValidErr(err);}
+              else{setValidErr("");setStep(s=>s+1);}
+            }} style={{background:NAV_COLOR}} className="flex-1 flex items-center justify-center gap-1.5 py-3.5 rounded-xl text-white font-bold text-sm hover:opacity-90 transition-opacity">Next<ChevronRight size={16}/></button>}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<UBAForm/>);
+  </script>
+</body>
+</html>
