@@ -29,7 +29,6 @@ window.__FORM710_B64__ = [
     var _React = React;
     var useState = _React.useState, useRef = _React.useRef, useEffect = _React.useEffect, useCallback = _React.useCallback, memo = _React.memo;
 
-// Icon components (replaces lucide-react import)
 function makeIcon(path) {
   return function(p) {
     var sz = p.size || 16;
@@ -1021,7 +1020,7 @@ function UBAForm() {
             propAddr = [p.address, p.city, p.state, p.zip].filter(Boolean).join(", ");
             surplus = totalIncome() - totalExpense();
             _context.n = 6;
-            return window.emailjs.send("service_1m5olao", "a3c13qe", {
+            return window.emailjs.send("service_1m5olao", "template_bxv6jwc", {
               borrower_name: bName || "Not provided",
               servicer: data.servicer || "Not selected",
               property_address: propAddr || "Not provided",
