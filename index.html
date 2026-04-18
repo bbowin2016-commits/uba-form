@@ -84,70 +84,127 @@ var FORM710_B64 = window.__FORM710_B64__;
 // ── Servicers ─────────────────────────────────────────────────────────────────
 var SERVICERS = [{
   name: "Bank of America",
-  method: "Fax or Portal",
-  fax: "1-866-580-9307",
-  portal: "homeloanhelp.bankofamerica.com"
+  phone: "800-669-6650",
+  fax: "866-580-9307",
+  mail: "6860 Argonne St, Unit A, HRM Home Retention, Denver, CO 80249",
+  portal: "bankofamerica.com/mortgage-assistance"
+}, {
+  name: "Caliber Home Loans",
+  phone: "800-401-6587",
+  mail: "13801 Wireless Way, Oklahoma City, OK 73134",
+  portal: "caliberhomeloans.com/assistance",
+  notes: "Portal preferred. No public fax. Call loss mitigation directly."
 }, {
   name: "Carrington Mortgage Services",
-  method: "Email",
-  email: "mortgageassistance@carringtonms.com"
+  phone: "800-561-4567",
+  fax: "877-267-1331",
+  mail: "Attn: Loss Mitigation, 500 N State College Blvd, Orange, CA 92868",
+  email: "mortgageassistance@carringtonms.com",
+  portal: "carringtonms.com"
 }, {
   name: "Chase / JPMorgan Chase",
-  method: "Portal Only",
-  portal: "chase.com/mortgage",
-  notes: "No public fax"
+  phone: "800-848-9380",
+  fax: "866-282-5682",
+  mail: "PO Box 469030, Glendale, CO 80246",
+  portal: "chase.com/mortgage"
+}, {
+  name: "Community Loan Servicing (formerly Bayview)",
+  phone: "800-457-5105",
+  mail: "4425 Ponce de Leon Blvd, Coral Gables, FL 33146",
+  portal: "communityloanservicing.com",
+  notes: "Florida-based operations. Formerly Bayview Loan Servicing."
+}, {
+  name: "Fay Servicing",
+  phone: "800-495-7166",
+  fax: "312-509-4794",
+  mail: "Attn: Application, PO Box 814609, Dallas, TX 75381",
+  portal: "fayservicing.com",
+  notes: "Online application preferred."
 }, {
   name: "Freedom Mortgage",
-  method: "Online Form",
-  portal: "freedommortgage.com/gethelp",
-  phone: "855-690-5900 opt. 7"
+  phone: "855-690-5900",
+  fax: "866-505-0949",
+  email: "LossMitigation@FreedomMortgage.com",
+  portal: "freedommortgage.com"
+}, {
+  name: "Lakeview Loan Servicing",
+  phone: "833-685-2580",
+  portal: "mylakeviewloan.com",
+  notes: "Serviced via LoanCare platform. Use LoanCare addresses for mail."
+}, {
+  name: "LoanCare",
+  phone: "800-274-6600",
+  fax: "757-466-0384",
+  mail: "PO Box 8068, Virginia Beach, VA 23450",
+  email: "lc-lossmit@loancare.net",
+  portal: "myloancare.com"
 }, {
   name: "Mr. Cooper / Nationstar",
-  method: "Portal or Phone",
-  portal: "mrcooper.com",
-  phone: "888-480-2432"
+  phone: "833-685-2566",
+  fax: "214-488-1993",
+  mail: "PO Box 619097, Dallas, TX 75261",
+  portal: "mymrcooper.com"
 }, {
-  name: "Newrez / Shellpoint (formerly SLS)",
-  method: "Portal",
-  portal: "sms.servicingloans.com",
-  phone: "800-315-4757"
+  name: "NewRez / Shellpoint / SLS",
+  phone: "800-315-4757",
+  fax: "866-467-1187",
+  mail: "PO Box 10826, Greenville, SC 29603",
+  email: "lossmitigation@shellpointmtg.com",
+  portal: "shellpointmtg.com",
+  notes: "Specialized Loan Servicing (SLS) was renamed Newrez LLC dba Shellpoint Mortgage Servicing as of May 2024."
 }, {
   name: "PennyMac Loan Services",
-  method: "Portal",
-  portal: "pennymacusa.com",
-  phone: "800-777-4001"
+  phone: "866-545-9070",
+  fax: "800-947-1421",
+  portal: "pennymac.com/mortgage-assistance"
 }, {
-  name: "PHH Mortgage",
-  method: "Phone, Verify Submission Method",
-  phone: "800-750-2518"
+  name: "PHH Mortgage / Onity",
+  phone: "800-449-8767",
+  fax: "856-917-2848",
+  mail: "PO Box 24737, West Palm Beach, FL 33416",
+  portal: "phhmortgage.com",
+  notes: "Strong Florida presence."
 }, {
-  name: "Rocket Mortgage / Quicken Loans",
-  method: "Portal",
-  portal: "rocketmortgage.com",
-  phone: "800-508-0944"
+  name: "PNC Bank",
+  phone: "800-523-8654",
+  fax: "855-288-3974",
+  email: "haa@pnc.com",
+  portal: "pnc.com/mortgage/financial-trouble"
+}, {
+  name: "Rocket Mortgage",
+  phone: "866-316-2432",
+  portal: "rocketmortgage.com/help",
+  notes: "Portal preferred. No public fax. Submit via Rocket Account under Help > Payment Assistance."
+}, {
+  name: "Rushmore Loan Management",
+  phone: "877-888-4606",
+  fax: "469-464-0308",
+  mail: "Attn: Centralized Mod Dept, PO Box 619097, Dallas, TX 75261",
+  email: "modification.assistance@rushmoreservicing.com",
+  portal: "rushmoreservicing.com"
 }, {
   name: "Select Portfolio Servicing (SPS)",
-  method: "Portal",
-  portal: "spservicing.com",
-  phone: "800-258-8602"
+  phone: "888-818-6032",
+  fax: "801-293-3936",
+  mail: "PO Box 65250, Salt Lake City, UT 84165",
+  portal: "spservicing.com"
 }, {
-  name: "Truist (BB&T / SunTrust)",
-  method: "Phone + Portal",
-  phone: "800-827-3722 opt. 9"
+  name: "Truist Bank",
+  phone: "800-634-6802",
+  portal: "truist.com/mortgage"
 }, {
-  name: "US Bank",
-  method: "Portal",
-  portal: "usbank.com/mortgage"
+  name: "U.S. Bank",
+  phone: "800-685-7698",
+  portal: "usbank.com/mortgage/assistance"
 }, {
   name: "Wells Fargo",
-  method: "Fax, Mail, or Portal",
-  fax: "1-866-359-7363",
-  portal: "wellsfargo.com/mortgageassistance",
-  mail: "PO Box 1629, Minneapolis MN 55440"
+  phone: "800-678-7986",
+  fax: "866-359-7363",
+  mail: "PO Box 1629, Minneapolis, MN 55440",
+  portal: "wellsfargo.com/mortgageassistance"
 }, {
   name: "Other / Not Listed",
-  method: "Verify with Servicer",
-  notes: "Call loss mitigation department directly"
+  notes: "Call your servicer's loss mitigation department directly. The number is on your monthly mortgage statement."
 }];
 var HARDSHIP_TYPES = ["Unemployment / Loss of Job", "Reduction in Income", "Increase in Housing Expenses", "Death of Borrower or Wage Earner", "Divorce or Separation", "Employment Transfer or Relocation", "Disability or Long-Term Illness", "Separation of Borrowers (Not Related to Divorce)", "Natural Disaster", "Business Failure", "Other"];
 var HARDSHIP_FIELD_MAP = {
@@ -1221,6 +1278,189 @@ function UBAForm() {
     };
   }();
 
+  // ── Cover Letter Generator ─────────────────────────────────────────────────
+  var handleGenerateCoverLetter = /*#__PURE__*/function () {
+    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var _window$PDFLib, PDFDocument, StandardFonts, rgb, PDFName, b, p, bName, propAddr, svcName, today, doc, page, helvetica, helveticaBold, _page$getSize, width, height, margin, y, drawText, wrap, body1, body2, body3, _i2, _arr, para, lines, _iterator5, _step5, line, bytes, uint8, binary, chunk, i, dataUrl, a, _t3;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            if (!(!pdfReady || !window.PDFLib)) {
+              _context3.n = 1;
+              break;
+            }
+            setError("PDF library not loaded. Please wait and try again.");
+            return _context3.a(2);
+          case 1:
+            setLoading(true);
+            _context3.p = 2;
+            _window$PDFLib = window.PDFLib, PDFDocument = _window$PDFLib.PDFDocument, StandardFonts = _window$PDFLib.StandardFonts, rgb = _window$PDFLib.rgb, PDFName = _window$PDFLib.PDFName;
+            b = data.borrower, p = data.property;
+            bName = [b.firstName, b.middleName, b.lastName].filter(Boolean).join(" ");
+            propAddr = [p.address, p.city, p.state, p.zip].filter(Boolean).join(", ");
+            svcName = data.servicer || "Mortgage Servicer";
+            today = new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric"
+            });
+            _context3.n = 3;
+            return PDFDocument.create();
+          case 3:
+            doc = _context3.v;
+            page = doc.addPage([612, 792]); // Letter size
+            _context3.n = 4;
+            return doc.embedFont(StandardFonts.Helvetica);
+          case 4:
+            helvetica = _context3.v;
+            _context3.n = 5;
+            return doc.embedFont(StandardFonts.HelveticaBold);
+          case 5:
+            helveticaBold = _context3.v;
+            _page$getSize = page.getSize(), width = _page$getSize.width, height = _page$getSize.height;
+            margin = 72; // 1 inch
+            y = height - margin;
+            drawText = function drawText(text, x, yPos, font, size, color) {
+              page.drawText(text, {
+                x: x,
+                y: yPos,
+                font: font,
+                size: size,
+                color: color || rgb(0, 0, 0)
+              });
+            };
+            wrap = function wrap(text, maxWidth, font, size) {
+              var words = text.split(" ");
+              var lines = [];
+              var current = "";
+              var _iterator4 = _createForOfIteratorHelper(words),
+                _step4;
+              try {
+                for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+                  var word = _step4.value;
+                  var test = current ? current + " " + word : word;
+                  if (font.widthOfTextAtSize(test, size) > maxWidth && current) {
+                    lines.push(current);
+                    current = word;
+                  } else {
+                    current = test;
+                  }
+                }
+              } catch (err) {
+                _iterator4.e(err);
+              } finally {
+                _iterator4.f();
+              }
+              if (current) lines.push(current);
+              return lines;
+            }; // Date
+            drawText(today, margin, y, helvetica, 11);
+            y -= 28;
+
+            // Servicer address block
+            drawText(svcName, margin, y, helveticaBold, 11);
+            y -= 16;
+            drawText("Loss Mitigation Department", margin, y, helvetica, 11);
+            y -= 32;
+
+            // Re: line
+            drawText("Re:", margin, y, helveticaBold, 11);
+            drawText("Fannie Mae / Freddie Mac Form 710 - Uniform Borrower Assistance Application", margin + 32, y, helveticaBold, 11);
+            y -= 16;
+            drawText("Borrower:", margin, y, helveticaBold, 11);
+            drawText(bName, margin + 68, y, helvetica, 11);
+            y -= 16;
+            drawText("Property Address:", margin, y, helveticaBold, 11);
+            drawText(propAddr, margin + 118, y, helvetica, 11);
+            y -= 16;
+            drawText("Loan Number:", margin, y, helveticaBold, 11);
+            drawText(p.loanNumber || "See attached application", margin + 92, y, helvetica, 11);
+            y -= 16;
+            drawText("Social Security Number:", margin, y, helveticaBold, 11);
+            drawText("XXX-XX-" + (b.ssn || "").slice(-4) || "See attached application", margin + 156, y, helvetica, 11);
+            y -= 32;
+
+            // Salutation
+            drawText("Dear Loss Mitigation Department:", margin, y, helvetica, 11);
+            y -= 24;
+
+            // Body paragraphs
+            body1 = "I am writing to submit my completed Uniform Borrower Assistance Application (Fannie Mae / Freddie Mac Form 710) in connection with the above-referenced mortgage loan. I am requesting consideration for loss mitigation assistance due to a financial hardship as described in the enclosed application.";
+            body2 = "Enclosed with this letter please find my completed Form 710 and supporting financial documentation. I respectfully request that you review my application and contact me at your earliest convenience to discuss the available options.";
+            body3 = "If you require any additional documentation or information, please do not hesitate to contact me. I am committed to working with you to resolve this matter and retain my home.";
+            for (_i2 = 0, _arr = [body1, body2, body3]; _i2 < _arr.length; _i2++) {
+              para = _arr[_i2];
+              lines = wrap(para, width - margin * 2, helvetica, 11);
+              _iterator5 = _createForOfIteratorHelper(lines);
+              try {
+                for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+                  line = _step5.value;
+                  drawText(line, margin, y, helvetica, 11);
+                  y -= 16;
+                }
+              } catch (err) {
+                _iterator5.e(err);
+              } finally {
+                _iterator5.f();
+              }
+              y -= 8;
+            }
+            y -= 8;
+            drawText("Sincerely,", margin, y, helvetica, 11);
+            y -= 48;
+            drawText("_________________________________", margin, y, helvetica, 11);
+            y -= 16;
+            drawText(bName, margin, y, helveticaBold, 11);
+            y -= 16;
+            drawText("Borrower", margin, y, helvetica, 10);
+            y -= 16;
+            if (b.primaryPhone) {
+              drawText("Phone: " + b.primaryPhone, margin, y, helvetica, 10);
+              y -= 14;
+            }
+            if (b.email) {
+              drawText("Email: " + b.email, margin, y, helvetica, 10);
+              y -= 14;
+            }
+            y -= 16;
+            drawText("Enclosures: Completed Form 710; Supporting Financial Documentation", margin, y, helvetica, 10);
+            _context3.n = 6;
+            return doc.save();
+          case 6:
+            bytes = _context3.v;
+            uint8 = new Uint8Array(bytes);
+            binary = "";
+            chunk = 8192;
+            for (i = 0; i < uint8.length; i += chunk) {
+              binary += String.fromCharCode.apply(String, _toConsumableArray(uint8.subarray(i, Math.min(i + chunk, uint8.length))));
+            }
+            dataUrl = "data:application/pdf;base64," + btoa(binary);
+            a = document.createElement("a");
+            a.href = dataUrl;
+            a.download = "CoverLetter_" + b.lastName + "_" + svcName.replace(/\s+/g, "_") + ".pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            _context3.n = 8;
+            break;
+          case 7:
+            _context3.p = 7;
+            _t3 = _context3.v;
+            setError("Cover letter generation failed: " + _t3.message);
+          case 8:
+            _context3.p = 8;
+            setLoading(false);
+            return _context3.f(8);
+          case 9:
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[2, 7, 8, 9]]);
+    }));
+    return function handleGenerateCoverLetter() {
+      return _ref13.apply(this, arguments);
+    };
+  }();
+
   // ── Validation ────────────────────────────────────────────────────────────
   var validateStep = function validateStep(s) {
     var b = data.borrower,
@@ -1335,17 +1575,15 @@ function UBAForm() {
           className: "text-xs font-bold uppercase tracking-widest mb-2"
         }, "Submission Info, Attorney Reference"), /*#__PURE__*/React.createElement("div", {
           className: "space-y-1 text-sm text-slate-700"
-        }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+        }, svc.phone && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
           className: "font-semibold"
-        }, "Method:"), " ", svc.method), svc.fax && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+        }, "Loss Mit Phone:"), " ", svc.phone), svc.fax && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
           className: "font-semibold"
         }, "Fax:"), " ", svc.fax), svc.email && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
           className: "font-semibold"
         }, "Email:"), " ", svc.email), svc.portal && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
           className: "font-semibold"
-        }, "Portal:"), " ", svc.portal), svc.phone && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
-          className: "font-semibold"
-        }, "Phone:"), " ", svc.phone), svc.mail && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+        }, "Portal:"), " ", svc.portal), svc.mail && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
           className: "font-semibold"
         }, "Mail:"), " ", svc.mail), svc.notes && /*#__PURE__*/React.createElement("div", {
           className: "text-slate-500 italic mt-1"
@@ -1711,9 +1949,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Monthly Obligations (see note)"
-        }].map(function (_ref13) {
-          var k = _ref13.k,
-            l = _ref13.l;
+        }].map(function (_ref14) {
+          var k = _ref14.k,
+            l = _ref14.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
@@ -1764,9 +2002,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Assets (see note above)"
-        }].map(function (_ref14) {
-          var k = _ref14.k,
-            l = _ref14.l;
+        }].map(function (_ref15) {
+          var k = _ref15.k,
+            l = _ref15.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
@@ -1875,8 +2113,8 @@ function UBAForm() {
               label: "Servicer",
               value: data.servicer
             }, {
-              label: "Method",
-              value: svc === null || svc === void 0 ? void 0 : svc.method
+              label: "Phone",
+              value: svc === null || svc === void 0 ? void 0 : svc.phone
             }, {
               label: "Fax",
               value: svc === null || svc === void 0 ? void 0 : svc.fax
@@ -1985,11 +2223,96 @@ function UBAForm() {
             }
           }, /*#__PURE__*/React.createElement(Printer, {
             size: 16
-          }), loading ? "Generating PDF..." : !pdfReady ? "Loading PDF library..." : "Download Filled Form 710 PDF"), /*#__PURE__*/React.createElement("button", {
+          }), loading ? "Generating PDF..." : !pdfReady ? "Loading PDF library..." : "Step 1: Download Filled Form 710 PDF"), /*#__PURE__*/React.createElement("button", {
+            onClick: handleGenerateCoverLetter,
+            disabled: loading || !pdfReady,
+            className: "w-full flex items-center justify-center gap-2 py-3.5 border border-slate-300 rounded-xl font-semibold text-sm hover:bg-slate-50 transition-colors disabled:opacity-50",
+            style: {
+              color: NAV_COLOR
+            }
+          }, /*#__PURE__*/React.createElement(FileText, {
+            size: 16
+          }), loading ? "Generating..." : !pdfReady ? "Loading PDF library..." : "Step 1b: Download Cover Letter"), svc && /*#__PURE__*/React.createElement("div", {
+            style: {
+              border: "1px solid #c2d0e8",
+              borderRadius: "12px"
+            },
+            className: "p-4"
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "text-xs font-bold uppercase tracking-widest mb-3",
+            style: {
+              color: NAV_COLOR
+            }
+          }, "Step 2: Submit to Your Servicer"), svc.portal ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("a", {
+            href: "https://" + svc.portal.replace(/^https?:\/\//, ""),
+            target: "_blank",
+            rel: "noopener noreferrer",
+            style: {
+              background: "#2d8a4e",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              padding: "12px",
+              borderRadius: "12px",
+              color: "white",
+              fontWeight: "700",
+              fontSize: "14px",
+              textDecoration: "none"
+            }
+          }, "Submit via ", svc.name, " Portal"), /*#__PURE__*/React.createElement("div", {
+            className: "text-xs text-slate-500 mt-2"
+          }, "Log in with your loan number and upload the cover letter, the completed Form 710, and your supporting documents together. Have your pay stubs, bank statements, tax returns, W-2s, and hardship documentation ready before you log in. Most servicer portals allow multiple file attachments in a single submission.")) : svc.email ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("a", {
+            href: "mailto:" + svc.email + "?subject=Mortgage Assistance Application - Loan " + data.property.loanNumber + "&body=Please find my completed Form 710 mortgage assistance application attached. Borrower: " + bName + ". Property: " + (data.property.address || "see form") + ".",
+            style: {
+              background: "#2d8a4e",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              padding: "12px",
+              borderRadius: "12px",
+              color: "white",
+              fontWeight: "700",
+              fontSize: "14px",
+              textDecoration: "none"
+            }
+          }, "Email Application to ", svc.name), /*#__PURE__*/React.createElement("div", {
+            className: "text-xs text-slate-500 mt-2 text-center"
+          }, "Attach the downloaded PDF to the email before sending.")) : svc.mail ? /*#__PURE__*/React.createElement("div", {
+            style: {
+              background: "#fffbeb",
+              border: "1px solid #f0d090"
+            },
+            className: "rounded-xl p-4"
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "text-sm font-semibold text-amber-800 mb-1"
+          }, "Mail Your Application: First Class"), /*#__PURE__*/React.createElement("div", {
+            className: "text-sm text-amber-700 mb-2"
+          }, "Send your completed Form 710 and supporting documents to:"), /*#__PURE__*/React.createElement("div", {
+            className: "text-sm font-mono bg-white rounded-lg p-3 border border-amber-200 text-slate-800"
+          }, svc.name, /*#__PURE__*/React.createElement("br", null), "Attn: Loss Mitigation", /*#__PURE__*/React.createElement("br", null), svc.mail), /*#__PURE__*/React.createElement("div", {
+            className: "text-xs text-amber-700 mt-2"
+          }, "Use First Class mail with a Certificate of Mailing. Keep your receipt as proof of submission date.")) : /*#__PURE__*/React.createElement("div", {
+            className: "text-sm text-slate-600 p-3 bg-slate-50 rounded-xl"
+          }, "Contact ", svc.name, " loss mitigation directly", svc.phone ? " at " + svc.phone : "", " to confirm their preferred submission method.")), /*#__PURE__*/React.createElement("div", {
+            style: {
+              border: "1px solid #c2d0e8",
+              borderRadius: "12px"
+            },
+            className: "p-4"
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "text-xs font-bold uppercase tracking-widest mb-2",
+            style: {
+              color: NAV_COLOR
+            }
+          }, "Step 3: Attorney Review (Recommended)"), /*#__PURE__*/React.createElement("div", {
+            className: "text-xs text-slate-500 mb-3"
+          }, "Have Beau Bowin review your application before it goes to your servicer. We catch errors, strengthen hardship explanations, and handle follow-up if the servicer requests more information."), /*#__PURE__*/React.createElement("button", {
             onClick: function onClick() {
               var steps = [1, 2, 4, 5];
-              for (var _i2 = 0, _steps = steps; _i2 < _steps.length; _i2++) {
-                var s = _steps[_i2];
+              for (var _i3 = 0, _steps = steps; _i3 < _steps.length; _i3++) {
+                var s = _steps[_i3];
                 var e = validateStep(s);
                 if (e) {
                   setValidErr("Step " + s + ": " + e);
@@ -2003,10 +2326,10 @@ function UBAForm() {
             style: {
               background: NAV_COLOR
             },
-            className: "w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+            className: "w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
           }, /*#__PURE__*/React.createElement(CheckCircle, {
             size: 16
-          }), loading ? "Sending..." : "Submit to Bowin Law Group")), /*#__PURE__*/React.createElement("div", {
+          }), loading ? "Sending..." : "Submit to Bowin Law Group"))), /*#__PURE__*/React.createElement("div", {
             className: "mt-4 text-xs text-slate-400 text-center"
           }, "Bowin Law Group | bbowin2016@gmail.com"));
         }
