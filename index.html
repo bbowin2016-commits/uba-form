@@ -283,14 +283,14 @@ var emptyB = {
   primaryLanguage: "English"
 };
 var emptyI = {
-  grossWages: "",
-  selfEmploy: "",
-  unemploy: "",
-  taxableSSI: "",
-  nontaxableSSI: "",
-  rental: "",
-  investment: "",
-  other: "",
+  grossWages: "0",
+  selfEmploy: "0",
+  unemploy: "0",
+  taxableSSI: "0",
+  nontaxableSSI: "0",
+  rental: "0",
+  investment: "0",
+  other: "0",
   otherDesc: ""
 };
 var INIT = {
@@ -326,24 +326,24 @@ var INIT = {
   bIncome: _objectSpread({}, emptyI),
   cIncome: _objectSpread({}, emptyI),
   expenses: {
-    firstMortgage: "",
-    secondMortgage: "",
-    hoaDues: "",
-    taxes: "",
-    insurance: "",
-    creditCards: "",
-    installments: "",
-    alimonyOut: "",
-    other: ""
+    firstMortgage: "0",
+    secondMortgage: "0",
+    hoaDues: "0",
+    taxes: "0",
+    insurance: "0",
+    creditCards: "0",
+    installments: "0",
+    alimonyOut: "0",
+    other: "0"
   },
   assets: {
-    checking: "",
-    savings: "",
-    cds: "",
-    stocks: "",
-    retirement: "",
-    otherRE: "",
-    other: ""
+    checking: "0",
+    savings: "0",
+    cds: "0",
+    stocks: "0",
+    retirement: "0",
+    otherRE: "0",
+    other: "0"
   },
   files: []
 };
@@ -723,7 +723,8 @@ var BorrowerFields = memo(function (_ref0) {
   }, "Work"), /*#__PURE__*/React.createElement("option", {
     value: "other"
   }, "Other"))), /*#__PURE__*/React.createElement(Lbl, {
-    label: "Email Address"
+    label: "Email Address",
+    required: true
   }, /*#__PURE__*/React.createElement(Inp, {
     type: "email",
     value: vals.email,
@@ -1051,7 +1052,7 @@ function UBAForm() {
             return _context.a(2);
           case 1:
             // Validate all critical steps before submitting
-            criticalSteps = [1, 2, 4, 5];
+            criticalSteps = [1, 2, 4, 5, 6, 7, 8];
             _i = 0, _criticalSteps = criticalSteps;
           case 2:
             if (!(_i < _criticalSteps.length)) {
@@ -1242,7 +1243,7 @@ function UBAForm() {
   }();
   var handleGeneratePDF = /*#__PURE__*/function () {
     var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var b, filledBytes, uint8, binary, chunk, i, dataUrl, a, _t2;
+      var b, filledBytes, uint8, binary, chunk, i, dataUrl, blob1, blobUrl1, a, _t2;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
@@ -1267,13 +1268,21 @@ function UBAForm() {
             for (i = 0; i < uint8.length; i += chunk) {
               binary += String.fromCharCode.apply(String, _toConsumableArray(uint8.subarray(i, Math.min(i + chunk, uint8.length))));
             }
-            dataUrl = "data:application/pdf;base64," + btoa(binary);
+            dataUrl = "data:application/pdf;base64," + btoa(binary); // Blob URL works on both desktop and mobile browsers
+            blob1 = new Blob([uint8], {
+              type: "application/pdf"
+            });
+            blobUrl1 = URL.createObjectURL(blob1);
             a = document.createElement("a");
-            a.href = dataUrl;
+            a.href = blobUrl1;
             a.download = "Form710_".concat(b.lastName || "Client", ".pdf");
+            a.target = "_blank";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            setTimeout(function () {
+              return URL.revokeObjectURL(blobUrl1);
+            }, 10000);
             _context3.n = 5;
             break;
           case 4:
@@ -1453,7 +1462,7 @@ function UBAForm() {
   // ── Combined Package Download (Cover Letter + Form 710) ────────────────────
   var handleGeneratePackage = /*#__PURE__*/function () {
     var _ref15 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-      var PDFDocument, b, coverBytes, filledBytes, formDoc, coverDoc, merged, coverPages, _iterator6, _step6, p, formPages, _iterator7, _step7, _p, mergedBytes, uint8, binary, chunk, i, dataUrl, a, _t4;
+      var criticalSteps, _i3, _criticalSteps2, s, err, PDFDocument, b, coverBytes, filledBytes, formDoc, coverDoc, merged, coverPages, _iterator6, _step6, p, formPages, _iterator7, _step7, _p, mergedBytes, uint8, binary, chunk, i, dataUrl, blob2, blobUrl2, a, _t4;
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.p = _context5.n) {
           case 0:
@@ -1464,35 +1473,57 @@ function UBAForm() {
             setError("PDF library not loaded. Please wait and try again.");
             return _context5.a(2);
           case 1:
+            // Validate all critical steps before generating
+            criticalSteps = [1, 2, 4, 5, 6, 7, 8];
+            _i3 = 0, _criticalSteps2 = criticalSteps;
+          case 2:
+            if (!(_i3 < _criticalSteps2.length)) {
+              _context5.n = 4;
+              break;
+            }
+            s = _criticalSteps2[_i3];
+            err = validateStep(s);
+            if (!err) {
+              _context5.n = 3;
+              break;
+            }
+            setError("Your application is incomplete. Step " + s + ": " + err + " Please go back and complete the missing information before downloading.");
+            setStep(s);
+            return _context5.a(2);
+          case 3:
+            _i3++;
+            _context5.n = 2;
+            break;
+          case 4:
             setLoading(true);
-            _context5.p = 2;
+            _context5.p = 5;
             PDFDocument = window.PDFLib.PDFDocument;
             b = data.borrower; // Build cover letter
-            _context5.n = 3;
+            _context5.n = 6;
             return buildCoverLetterBytes();
-          case 3:
+          case 6:
             coverBytes = _context5.v;
-            _context5.n = 4;
+            _context5.n = 7;
             return buildFilledFormBytes();
-          case 4:
+          case 7:
             filledBytes = _context5.v;
-            _context5.n = 5;
+            _context5.n = 8;
             return PDFDocument.load(filledBytes, {
               ignoreEncryption: true
             });
-          case 5:
-            formDoc = _context5.v;
-            _context5.n = 6;
-            return PDFDocument.load(coverBytes);
-          case 6:
-            coverDoc = _context5.v;
-            _context5.n = 7;
-            return PDFDocument.create();
-          case 7:
-            merged = _context5.v;
-            _context5.n = 8;
-            return merged.copyPages(coverDoc, coverDoc.getPageIndices());
           case 8:
+            formDoc = _context5.v;
+            _context5.n = 9;
+            return PDFDocument.load(coverBytes);
+          case 9:
+            coverDoc = _context5.v;
+            _context5.n = 10;
+            return PDFDocument.create();
+          case 10:
+            merged = _context5.v;
+            _context5.n = 11;
+            return merged.copyPages(coverDoc, coverDoc.getPageIndices());
+          case 11:
             coverPages = _context5.v;
             _iterator6 = _createForOfIteratorHelper(coverPages);
             try {
@@ -1505,9 +1536,9 @@ function UBAForm() {
             } finally {
               _iterator6.f();
             }
-            _context5.n = 9;
+            _context5.n = 12;
             return merged.copyPages(formDoc, formDoc.getPageIndices());
-          case 9:
+          case 12:
             formPages = _context5.v;
             _iterator7 = _createForOfIteratorHelper(formPages);
             try {
@@ -1520,9 +1551,9 @@ function UBAForm() {
             } finally {
               _iterator7.f();
             }
-            _context5.n = 10;
+            _context5.n = 13;
             return merged.save();
-          case 10:
+          case 13:
             mergedBytes = _context5.v;
             uint8 = new Uint8Array(mergedBytes);
             binary = "";
@@ -1530,27 +1561,35 @@ function UBAForm() {
             for (i = 0; i < uint8.length; i += chunk) {
               binary += String.fromCharCode.apply(String, _toConsumableArray(uint8.subarray(i, Math.min(i + chunk, uint8.length))));
             }
-            dataUrl = "data:application/pdf;base64," + btoa(binary);
+            dataUrl = "data:application/pdf;base64," + btoa(binary); // Blob URL works on both desktop and mobile browsers
+            blob2 = new Blob([new Uint8Array(mergedBytes)], {
+              type: "application/pdf"
+            });
+            blobUrl2 = URL.createObjectURL(blob2);
             a = document.createElement("a");
-            a.href = dataUrl;
+            a.href = blobUrl2;
             a.download = "MortgageAssistancePackage_" + (b.lastName || "Client") + ".pdf";
+            a.target = "_blank";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            _context5.n = 12;
+            setTimeout(function () {
+              return URL.revokeObjectURL(blobUrl2);
+            }, 10000);
+            _context5.n = 15;
             break;
-          case 11:
-            _context5.p = 11;
+          case 14:
+            _context5.p = 14;
             _t4 = _context5.v;
             setError("Package generation failed: " + _t4.message);
-          case 12:
-            _context5.p = 12;
+          case 15:
+            _context5.p = 15;
             setLoading(false);
-            return _context5.f(12);
-          case 13:
+            return _context5.f(15);
+          case 16:
             return _context5.a(2);
         }
-      }, _callee5, null, [[2, 11, 12, 13]]);
+      }, _callee5, null, [[5, 14, 15, 16]]);
     }));
     return function handleGeneratePackage() {
       return _ref15.apply(this, arguments);
@@ -1572,7 +1611,9 @@ function UBAForm() {
           if (!b.firstName) miss.push("First Name");
           if (!b.lastName) miss.push("Last Name");
           if (!b.ssn) miss.push("Social Security Number");
+          if (!b.dob) miss.push("Date of Birth");
           if (!b.primaryPhone) miss.push("Primary Phone Number");
+          if (!b.email) miss.push("Email Address");
           return miss.length ? "Please complete: " + miss.join(", ") + "." : null;
         }
       case 3:
@@ -1585,6 +1626,8 @@ function UBAForm() {
           if (!p.city) _miss.push("City");
           if (!p.zip) _miss.push("ZIP Code");
           if (!p.loanNumber) _miss.push("Mortgage Loan Number");
+          if (!p.estimatedValue) _miss.push("Estimated Property Value");
+          if (!p.unpaidBalance) _miss.push("Unpaid Loan Balance");
           return _miss.length ? "Please complete: " + _miss.join(", ") + "." : null;
         }
       case 5:
@@ -1594,6 +1637,34 @@ function UBAForm() {
           if (!h.date) _miss2.push("Hardship start date");
           if (!h.explanation || h.explanation.trim().length < 20) _miss2.push("Hardship explanation (please provide more detail)");
           return _miss2.length ? "Please complete: " + _miss2.join(", ") + "." : null;
+        }
+      case 6:
+        {
+          var incFields = ["grossWages", "selfEmploy", "unemploy", "taxableSSI", "nontaxableSSI", "rental", "investment", "other"];
+          var blank = incFields.filter(function (k) {
+            return data.bIncome[k] === "" || data.bIncome[k] === undefined;
+          });
+          if (blank.length) return "All income fields are required. Enter 0 if none applies.";
+          return null;
+        }
+      case 7:
+        {
+          var expFields = ["firstMortgage", "secondMortgage", "hoaDues", "taxes", "insurance", "creditCards", "installments", "alimonyOut", "other"];
+          var _blank = expFields.filter(function (k) {
+            return data.expenses[k] === "" || data.expenses[k] === undefined;
+          });
+          if (_blank.length) return "All expense fields are required. Enter 0 if none applies.";
+          if (!data.expenses.firstMortgage || parseFloat(data.expenses.firstMortgage) === 0) return "First Mortgage Payment is required. Enter your current monthly mortgage payment.";
+          return null;
+        }
+      case 8:
+        {
+          var assetFields = ["checking", "savings", "cds", "stocks", "otherRE", "other"];
+          var _blank2 = assetFields.filter(function (k) {
+            return data.assets[k] === "" || data.assets[k] === undefined;
+          });
+          if (_blank2.length) return "All asset fields are required. Enter 0 if none applies.";
+          return null;
         }
       default:
         return null;
@@ -1988,6 +2059,8 @@ function UBAForm() {
           Icon: DollarSign,
           title: "Monthly Income"
         }), /*#__PURE__*/React.createElement(InstructionBox, {
+          text: "Every field below is required. Enter 0 if you have no income from that source. A blank field tells the servicer the question was skipped, not that the answer is zero. These are not the same thing."
+        }), /*#__PURE__*/React.createElement(InstructionBox, {
           text: "Before you enter a single number, read this. The income and expense sections exist to show your servicer one thing: why you cannot afford your current payment, and whether a modified payment would help. Be accurate. Do not underestimate your monthly expenses. If your numbers make it look like you have $800 left over every month, the servicer will wonder why you need help. Do not exaggerate them either. If your expenses exceed your income by a large amount every month, the servicer may conclude that even a modified payment would be unaffordable, making a modification pointless from their perspective. Most successful modification applicants land right around break-even. A small monthly shortfall shows exactly what it needs to show: that your current payment is the problem, not your overall financial situation. If a reduced payment would make you whole, that is the story these numbers need to tell. Take your time. If the totals do not look right when you finish, go back and check your figures before submitting."
         }), /*#__PURE__*/React.createElement(IncomeBlock, {
           label: "Borrower Income",
@@ -2014,6 +2087,8 @@ function UBAForm() {
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: ClipboardList,
           title: "Monthly Expenses"
+        }), /*#__PURE__*/React.createElement(InstructionBox, {
+          text: "Every field below is required. Enter 0 for any expense that does not apply to you. Your first mortgage payment is required and cannot be zero."
         }), /*#__PURE__*/React.createElement(InstructionBox, {
           text: "Keep the guidance from the previous step in mind as you complete this section. Income and expenses tell one story together. For credit cards, enter the minimum monthly payment due, not the total balance. For your first mortgage payment, enter your total monthly payment as shown on your statement. If your taxes and insurance are escrowed, that amount already includes them and you should leave the separate tax and insurance fields below blank. If you pay taxes and insurance separately outside of your mortgage payment, enter only the principal and interest in the mortgage field and then enter taxes and insurance in their own fields below. Every housing cost should appear somewhere, but never in two places."
         }), /*#__PURE__*/React.createElement("div", {
@@ -2077,6 +2152,8 @@ function UBAForm() {
           Icon: Wallet,
           title: "Assets"
         }), /*#__PURE__*/React.createElement(InstructionBox, {
+          text: "Every field below is required. Enter 0 for any asset you do not have. Retirement accounts such as 401k and IRA are excluded from Form 710 and should not be entered here."
+        }), /*#__PURE__*/React.createElement(InstructionBox, {
           text: "Enter your best estimate of the current balance for each account. Reasonable estimates are acceptable. Note: retirement accounts such as 401(k), IRA, and college savings accounts such as 529 plans are excluded from Form 710 and should not be included here. For Other Assets, examples include: a boat or RV, jewelry of significant value, a structured settlement or annuity payment, a life insurance policy with cash value, or any other asset of value not listed above. If you have none of these, leave that field blank."
         }), /*#__PURE__*/React.createElement("div", {
           className: "grid grid-cols-2 gap-3"
@@ -2128,7 +2205,7 @@ function UBAForm() {
           Icon: FileText,
           title: "Supporting Documents"
         }), /*#__PURE__*/React.createElement(InstructionBox, {
-          text: "After submitting this application, email your supporting documents directly to bbowin2016@gmail.com. Use your name and property address as the subject line. Bowin Law Group will confirm receipt and let you know if anything is missing."
+          text: "Before you submit, gather your supporting documents and save them together in one folder on your computer or phone. When you upload your application package to your servicer's portal on the next step, you will upload these documents at the same time. Having them ready before you log in to the portal prevents delays and ensures your submission is complete."
         }), /*#__PURE__*/React.createElement("div", {
           className: "mb-5"
         }, /*#__PURE__*/React.createElement("div", {
@@ -2300,9 +2377,38 @@ function UBAForm() {
             },
             items: [{
               label: "Documents",
-              value: "Email to bbowin2016@gmail.com after submitting"
+              value: "Gather and save in a folder for portal upload"
             }]
-          }), error && /*#__PURE__*/React.createElement("div", {
+          }), function () {
+            var incomplete = [];
+            var labels = {
+              1: "Servicer",
+              2: "Borrower Information",
+              4: "Property & Loan",
+              5: "Hardship",
+              6: "Monthly Income",
+              7: "Monthly Expenses",
+              8: "Assets"
+            };
+            [1, 2, 4, 5, 6, 7, 8].forEach(function (s) {
+              if (validateStep(s)) incomplete.push(labels[s]);
+            });
+            return incomplete.length > 0 ? /*#__PURE__*/React.createElement("div", {
+              style: {
+                background: "#fef2f2",
+                border: "1px solid #fca5a5"
+              },
+              className: "mt-3 p-3 rounded-xl text-sm text-red-700"
+            }, /*#__PURE__*/React.createElement("div", {
+              className: "font-semibold mb-1"
+            }, "Required information is missing. Please complete the following before downloading:"), /*#__PURE__*/React.createElement("ul", {
+              className: "list-disc list-inside space-y-0.5"
+            }, incomplete.map(function (label) {
+              return /*#__PURE__*/React.createElement("li", {
+                key: label
+              }, label);
+            }))) : null;
+          }(), error && /*#__PURE__*/React.createElement("div", {
             style: {
               background: "#fef2f2",
               border: "1px solid #fca5a5"
@@ -2420,8 +2526,8 @@ function UBAForm() {
           }, "Optional but recommended: send a copy to Bowin Law Group for attorney review. We catch errors, strengthen hardship explanations, and can handle follow-up communications with your servicer on your behalf."), /*#__PURE__*/React.createElement("button", {
             onClick: function onClick() {
               var steps = [1, 2, 4, 5];
-              for (var _i3 = 0, _steps = steps; _i3 < _steps.length; _i3++) {
-                var s = _steps[_i3];
+              for (var _i4 = 0, _steps = steps; _i4 < _steps.length; _i4++) {
+                var s = _steps[_i4];
                 var e = validateStep(s);
                 if (e) {
                   setValidErr("Step " + s + ": " + e);
