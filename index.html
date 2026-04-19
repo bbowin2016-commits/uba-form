@@ -87,12 +87,12 @@ var SERVICERS = [{
   phone: "800-669-6650",
   fax: "866-580-9307",
   mail: "6860 Argonne St, Unit A, HRM Home Retention, Denver, CO 80249",
-  portal: "bankofamerica.com/mortgage-assistance"
+  portal: "bankofamerica.com/mortgage"
 }, {
   name: "Caliber Home Loans",
   phone: "800-401-6587",
   mail: "13801 Wireless Way, Oklahoma City, OK 73134",
-  portal: "caliberhomeloans.com/assistance",
+  portal: "caliberhomeloans.com",
   notes: "Portal preferred. No public fax. Call loss mitigation directly."
 }, {
   name: "Carrington Mortgage Services",
@@ -100,30 +100,30 @@ var SERVICERS = [{
   fax: "877-267-1331",
   mail: "Attn: Loss Mitigation, 500 N State College Blvd, Orange, CA 92868",
   email: "mortgageassistance@carringtonms.com",
-  portal: "carringtonms.com"
+  portal: "carringtonmortgage.com/login"
 }, {
   name: "Chase / JPMorgan Chase",
   phone: "800-848-9380",
   fax: "866-282-5682",
   mail: "PO Box 469030, Glendale, CO 80246",
-  portal: "chase.com/mortgage"
+  portal: "chase.com/personal/mortgage"
 }, {
   name: "Fay Servicing",
   phone: "800-495-7166",
   fax: "312-509-4794",
   mail: "Attn: Application, PO Box 814609, Dallas, TX 75381",
-  portal: "fayservicing.com",
+  portal: "loansphereservicingdigital.bkiconnect.com/fayservicing",
   notes: "Online application preferred."
 }, {
   name: "Freedom Mortgage",
   phone: "855-690-5900",
   fax: "866-505-0949",
   email: "LossMitigation@FreedomMortgage.com",
-  portal: "freedommortgage.com"
+  portal: "mylogin.freedommortgage.com"
 }, {
   name: "Lakeview Loan Servicing",
   phone: "833-685-2580",
-  portal: "mylakeviewloan.com",
+  portal: "myloancare.com/portal/document-center",
   notes: "Serviced via LoanCare platform. Use LoanCare addresses for mail."
 }, {
   name: "LoanCare",
@@ -131,27 +131,27 @@ var SERVICERS = [{
   fax: "757-466-0384",
   mail: "PO Box 8068, Virginia Beach, VA 23450",
   email: "lc-lossmit@loancare.net",
-  portal: "myloancare.com"
+  portal: "myloancare.com/portal/document-center"
 }, {
   name: "Mr. Cooper / Nationstar",
   phone: "833-685-2566",
   fax: "214-488-1993",
   email: "modification.assistance@mrcooper.com",
   mail: "PO Box 619097, Dallas, TX 75261",
-  portal: "mymrcooper.com"
+  portal: "mrcooper.com/signin"
 }, {
   name: "NewRez / Shellpoint / SLS",
   phone: "800-315-4757",
   fax: "866-467-1187",
   mail: "PO Box 10826, Greenville, SC 29603",
   email: "lossmitigation@shellpointmtg.com",
-  portal: "shellpointmtg.com",
+  portal: "myaccount.shellpointmtg.com",
   notes: "Specialized Loan Servicing (SLS) was renamed Newrez LLC dba Shellpoint Mortgage Servicing as of May 2024."
 }, {
   name: "PennyMac Loan Services",
   phone: "866-545-9070",
   fax: "800-947-1421",
-  portal: "pennymac.com/mortgage-assistance"
+  portal: "mypennymac.pennymac.com/account/login"
 }, {
   name: "PHH Mortgage / Onity",
   phone: "800-449-8767",
@@ -169,7 +169,7 @@ var SERVICERS = [{
 }, {
   name: "Rocket Mortgage",
   phone: "866-316-2432",
-  portal: "rocketmortgage.com/help",
+  portal: "rocketmortgage.com",
   notes: "Portal preferred. No public fax. Submit via Rocket Account under Help > Payment Assistance."
 }, {
   name: "Rushmore Loan Management",
@@ -177,20 +177,20 @@ var SERVICERS = [{
   fax: "469-464-0308",
   mail: "Attn: Centralized Mod Dept, PO Box 619097, Dallas, TX 75261",
   email: "modification.assistance@rushmoreservicing.com",
-  portal: "rushmoreservicing.com"
+  portal: "rushmoreservicing.com/signin"
 }, {
   name: "Select Portfolio Servicing (SPS)",
   phone: "888-818-6032",
   fax: "801-293-3936",
   mail: "PO Box 65250, Salt Lake City, UT 84165",
-  portal: "spservicing.com"
+  portal: "spservicing.com/Login"
 }, {
   name: "Truist Bank",
   phone: "855-223-4680",
   fax: "877-589-0758",
   email: "HomePreservationDocuments@Truist.com",
   mail: "Attn: VA_RVW-5113, PO Box 26150, Richmond, VA 23260",
-  portal: "truist.com/mortgage"
+  portal: "truist.com/mortgage/manage-your-mortgage/mortgage-assistance"
 }, {
   name: "U.S. Bank",
   phone: "855-698-7627",
@@ -203,7 +203,7 @@ var SERVICERS = [{
   phone: "800-678-7986",
   fax: "866-359-7363",
   mail: "PO Box 1629, Minneapolis, MN 55440",
-  portal: "wellsfargo.com/mortgageassistance"
+  portal: "wellsfargo.com/mortgage"
 }, {
   name: "Other / Not Listed",
   notes: "Call your servicer's loss mitigation department directly. The number is on your monthly mortgage statement."
@@ -1281,21 +1281,13 @@ function UBAForm() {
   }();
 
   // ── Cover Letter Generator ─────────────────────────────────────────────────
-  var handleGenerateCoverLetter = /*#__PURE__*/function () {
+  var buildCoverLetterBytes = /*#__PURE__*/function () {
     var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var _window$PDFLib, PDFDocument, StandardFonts, rgb, PDFName, b, p, bName, propAddr, svcName, today, doc, page, helvetica, helveticaBold, _page$getSize, width, height, margin, y, drawText, wrap, body1, body2, body3, _i2, _arr, para, lines, _iterator5, _step5, line, bytes, uint8, binary, chunk, i, dataUrl, a, _t3;
+      var _window$PDFLib, PDFDocument, StandardFonts, rgb, PDFName, b, p, bName, propAddr, svcName, today, doc, page, helvetica, helveticaBold, _page$getSize, width, height, margin, y, drawText, wrap, body1, body2, body3, _i2, _arr, para, lines, _iterator5, _step5, line, _t3;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
-            if (!(!pdfReady || !window.PDFLib)) {
-              _context3.n = 1;
-              break;
-            }
-            setError("PDF library not loaded. Please wait and try again.");
-            return _context3.a(2);
-          case 1:
-            setLoading(true);
-            _context3.p = 2;
+            _context3.p = 0;
             _window$PDFLib = window.PDFLib, PDFDocument = _window$PDFLib.PDFDocument, StandardFonts = _window$PDFLib.StandardFonts, rgb = _window$PDFLib.rgb, PDFName = _window$PDFLib.PDFName;
             b = data.borrower, p = data.property;
             bName = [b.firstName, b.middleName, b.lastName].filter(Boolean).join(" ");
@@ -1306,18 +1298,18 @@ function UBAForm() {
               month: "long",
               day: "numeric"
             });
-            _context3.n = 3;
+            _context3.n = 1;
             return PDFDocument.create();
-          case 3:
+          case 1:
             doc = _context3.v;
             page = doc.addPage([612, 792]); // Letter size
-            _context3.n = 4;
+            _context3.n = 2;
             return doc.embedFont(StandardFonts.Helvetica);
-          case 4:
+          case 2:
             helvetica = _context3.v;
-            _context3.n = 5;
+            _context3.n = 3;
             return doc.embedFont(StandardFonts.HelveticaBold);
-          case 5:
+          case 3:
             helveticaBold = _context3.v;
             _page$getSize = page.getSize(), width = _page$getSize.width, height = _page$getSize.height;
             margin = 72; // 1 inch
@@ -1426,11 +1418,99 @@ function UBAForm() {
             }
             y -= 16;
             drawText("Enclosures: Completed Form 710; Supporting Financial Documentation", margin, y, helvetica, 10);
-            _context3.n = 6;
+            _context3.n = 4;
             return doc.save();
+          case 4:
+            return _context3.a(2, _context3.v);
+          case 5:
+            _context3.p = 5;
+            _t3 = _context3.v;
+            throw _t3;
           case 6:
-            bytes = _context3.v;
-            uint8 = new Uint8Array(bytes);
+            return _context3.a(2);
+        }
+      }, _callee3, null, [[0, 5]]);
+    }));
+    return function buildCoverLetterBytes() {
+      return _ref13.apply(this, arguments);
+    };
+  }();
+
+  // ── Combined Package Download (Cover Letter + Form 710) ────────────────────
+  var handleGeneratePackage = /*#__PURE__*/function () {
+    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+      var PDFDocument, b, coverBytes, pdfBytes, formDoc, coverDoc, merged, coverPages, _iterator6, _step6, p, formPages, _iterator7, _step7, _p, mergedBytes, uint8, binary, chunk, i, dataUrl, a, _t4;
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
+          case 0:
+            if (!(!pdfReady || !window.PDFLib)) {
+              _context4.n = 1;
+              break;
+            }
+            setError("PDF library not loaded. Please wait and try again.");
+            return _context4.a(2);
+          case 1:
+            setLoading(true);
+            _context4.p = 2;
+            PDFDocument = window.PDFLib.PDFDocument;
+            b = data.borrower; // Build cover letter
+            _context4.n = 3;
+            return buildCoverLetterBytes();
+          case 3:
+            coverBytes = _context4.v;
+            // Build filled Form 710
+            pdfBytes = Uint8Array.from(atob(FORM710_B64), function (c) {
+              return c.charCodeAt(0);
+            });
+            _context4.n = 4;
+            return PDFDocument.load(pdfBytes, {
+              ignoreEncryption: true
+            });
+          case 4:
+            formDoc = _context4.v;
+            _context4.n = 5;
+            return PDFDocument.load(coverBytes);
+          case 5:
+            coverDoc = _context4.v;
+            _context4.n = 6;
+            return PDFDocument.create();
+          case 6:
+            merged = _context4.v;
+            _context4.n = 7;
+            return merged.copyPages(coverDoc, coverDoc.getPageIndices());
+          case 7:
+            coverPages = _context4.v;
+            _iterator6 = _createForOfIteratorHelper(coverPages);
+            try {
+              for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+                p = _step6.value;
+                merged.addPage(p);
+              }
+            } catch (err) {
+              _iterator6.e(err);
+            } finally {
+              _iterator6.f();
+            }
+            _context4.n = 8;
+            return merged.copyPages(formDoc, formDoc.getPageIndices());
+          case 8:
+            formPages = _context4.v;
+            _iterator7 = _createForOfIteratorHelper(formPages);
+            try {
+              for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+                _p = _step7.value;
+                merged.addPage(_p);
+              }
+            } catch (err) {
+              _iterator7.e(err);
+            } finally {
+              _iterator7.f();
+            }
+            _context4.n = 9;
+            return merged.save();
+          case 9:
+            mergedBytes = _context4.v;
+            uint8 = new Uint8Array(mergedBytes);
             binary = "";
             chunk = 8192;
             for (i = 0; i < uint8.length; i += chunk) {
@@ -1439,27 +1519,27 @@ function UBAForm() {
             dataUrl = "data:application/pdf;base64," + btoa(binary);
             a = document.createElement("a");
             a.href = dataUrl;
-            a.download = "CoverLetter_" + b.lastName + "_" + svcName.replace(/\s+/g, "_") + ".pdf";
+            a.download = "MortgageAssistancePackage_" + (b.lastName || "Client") + ".pdf";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            _context3.n = 8;
+            _context4.n = 11;
             break;
-          case 7:
-            _context3.p = 7;
-            _t3 = _context3.v;
-            setError("Cover letter generation failed: " + _t3.message);
-          case 8:
-            _context3.p = 8;
+          case 10:
+            _context4.p = 10;
+            _t4 = _context4.v;
+            setError("Package generation failed: " + _t4.message);
+          case 11:
+            _context4.p = 11;
             setLoading(false);
-            return _context3.f(8);
-          case 9:
-            return _context3.a(2);
+            return _context4.f(11);
+          case 12:
+            return _context4.a(2);
         }
-      }, _callee3, null, [[2, 7, 8, 9]]);
+      }, _callee4, null, [[2, 10, 11, 12]]);
     }));
-    return function handleGenerateCoverLetter() {
-      return _ref13.apply(this, arguments);
+    return function handleGeneratePackage() {
+      return _ref14.apply(this, arguments);
     };
   }();
 
@@ -1951,9 +2031,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Monthly Obligations (see note)"
-        }].map(function (_ref14) {
-          var k = _ref14.k,
-            l = _ref14.l;
+        }].map(function (_ref15) {
+          var k = _ref15.k,
+            l = _ref15.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
@@ -2004,9 +2084,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Assets (see note above)"
-        }].map(function (_ref15) {
-          var k = _ref15.k,
-            l = _ref15.l;
+        }].map(function (_ref16) {
+          var k = _ref16.k,
+            l = _ref16.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
@@ -2217,7 +2297,7 @@ function UBAForm() {
           }, error), /*#__PURE__*/React.createElement("div", {
             className: "mt-5 space-y-3"
           }, /*#__PURE__*/React.createElement("button", {
-            onClick: handleGeneratePDF,
+            onClick: handleGeneratePackage,
             disabled: loading || !pdfReady,
             className: "w-full flex items-center justify-center gap-2 py-3.5 border border-slate-300 rounded-xl font-semibold text-sm hover:bg-slate-50 transition-colors disabled:opacity-50",
             style: {
@@ -2225,16 +2305,7 @@ function UBAForm() {
             }
           }, /*#__PURE__*/React.createElement(Printer, {
             size: 16
-          }), loading ? "Generating PDF..." : !pdfReady ? "Loading PDF library..." : "Step 1: Download Filled Form 710 PDF"), /*#__PURE__*/React.createElement("button", {
-            onClick: handleGenerateCoverLetter,
-            disabled: loading || !pdfReady,
-            className: "w-full flex items-center justify-center gap-2 py-3.5 border border-slate-300 rounded-xl font-semibold text-sm hover:bg-slate-50 transition-colors disabled:opacity-50",
-            style: {
-              color: NAV_COLOR
-            }
-          }, /*#__PURE__*/React.createElement(FileText, {
-            size: 16
-          }), loading ? "Generating..." : !pdfReady ? "Loading PDF library..." : "Step 1b: Download Cover Letter"), svc && /*#__PURE__*/React.createElement("div", {
+          }), loading ? "Generating PDF..." : !pdfReady ? "Loading PDF library..." : "Step 1: Download Application Package (Cover Letter + Form 710)"), svc && /*#__PURE__*/React.createElement("div", {
             style: {
               border: "1px solid #c2d0e8",
               borderRadius: "12px"
