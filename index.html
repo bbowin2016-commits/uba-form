@@ -1117,31 +1117,22 @@ function UBAForm() {
   }();
 
   // ── PDF generation ─────────────────────────────────────────────────────────
-  var handleGeneratePDF = /*#__PURE__*/function () {
+  // ── Shared: build filled Form 710 bytes ──────────────────────────────────
+  var buildFilledFormBytes = /*#__PURE__*/function () {
     var _ref12 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-      var PDFDocument, pdfBytes, pdfDoc, form, b, c, p, h, as, bName, cName, propAddr, mailAddr, pref, occ, ht, dur, PHONE, PREF, PT, OC, GL, today, filledBytes, uint8, binary, chunk, i, base64pdf, dataUrl, a, _t2;
+      var PDFDocument, pdfBytes, pdfDoc, form, b, c, p, h, as, bName, cName, propAddr, mailAddr, pref, occ, ht, dur, PHONE, PREF, PT, OC, GL, today;
       return _regenerator().w(function (_context2) {
-        while (1) switch (_context2.p = _context2.n) {
+        while (1) switch (_context2.n) {
           case 0:
-            if (!(!pdfReady || !window.PDFLib)) {
-              _context2.n = 1;
-              break;
-            }
-            setError("PDF library not loaded. Please wait and try again.");
-            return _context2.a(2);
-          case 1:
-            setLoading(true);
-            setError("");
-            _context2.p = 2;
             PDFDocument = window.PDFLib.PDFDocument;
             pdfBytes = Uint8Array.from(atob(FORM710_B64), function (c) {
               return c.charCodeAt(0);
             });
-            _context2.n = 3;
+            _context2.n = 1;
             return PDFDocument.load(pdfBytes, {
               ignoreEncryption: true
             });
-          case 3:
+          case 1:
             pdfDoc = _context2.v;
             form = pdfDoc.getForm();
             b = data.borrower, c = data.coBorrower, p = data.property, h = data.hardship, as = data.assets;
@@ -1149,7 +1140,7 @@ function UBAForm() {
             cName = [c.firstName, c.middleName, c.lastName].filter(Boolean).join(" ");
             propAddr = [p.address, p.city, p.state, p.zip].filter(Boolean).join(", ");
             mailAddr = [b.mailingAddress, b.mailingCity, b.mailingState, b.mailingZip].filter(Boolean).join(", ");
-            pref = (b.preferredContact || "cell").toLowerCase(); // primaryPhoneType used for phone check1, alternatePhoneType for phone check2
+            pref = (b.preferredContact || "cell").toLowerCase();
             occ = p.occupancy || "primary";
             ht = h.types || [];
             dur = h.resolved ? "3" : h.duration === "long" ? "2" : "1";
@@ -1183,7 +1174,7 @@ function UBAForm() {
               "sell": "2",
               "transfer": "3",
               "undecided": "4"
-            }; // Page 1
+            };
             setTextField(form, "Text1", p.loanNumber);
             setTextField(form, "Borrowers name", bName);
             setTextField(form, "Social Security Number last 4 digits", (b.ssn || "").slice(-4));
@@ -1212,7 +1203,6 @@ function UBAForm() {
               setRadio(form, "phone check3", PHONE[c.primaryPhoneType] || "1");
               if (c.alternatePhone) setRadio(form, "phone check4", PHONE[c.alternatePhoneType || "cell"] || "1");
             }
-            // Page 2
             setTextField(form, "The hardship causing mortgage payment challenges began on approximately date", fmtDate(h.date));
             if (h.resolved && h.resolvedDate) setTextField(form, "undefined_2", fmtDate(h.resolvedDate));
             setRadio(form, "hardship checkbox", dur);
@@ -1224,7 +1214,6 @@ function UBAForm() {
               setTextField(form, "1", h.explanation.slice(0, 500));
               setCheck(form, "other checkbox", true);
             }
-            // Page 3
             setTextField(form, "amount1", combined("grossWages"));
             setTextField(form, "amount2", combined("selfEmploy"));
             setTextField(form, "amount3", combined("unemploy"));
@@ -1237,57 +1226,82 @@ function UBAForm() {
             setTextField(form, "amount10", fmtMoney(String(parseFloat(as.savings || 0) + parseFloat(as.cds || 0))));
             setTextField(form, "amount11", fmtMoney(as.stocks));
             setTextField(form, "amount12", fmtMoney(as.other));
-            // Page 4
             today = new Date().toLocaleDateString("en-US");
             setTextField(form, "Date", today);
             if (data.hasCoBorrower) setTextField(form, "Date_2", today);
-            _context2.n = 4;
+            _context2.n = 2;
             return pdfDoc.save();
-          case 4:
-            filledBytes = _context2.v;
-            // Convert to base64 data URL for maximum browser/sandbox compatibility
-            uint8 = new Uint8Array(filledBytes); // Chunked base64 conversion to avoid call stack limits
+          case 2:
+            return _context2.a(2, _context2.v);
+        }
+      }, _callee2);
+    }));
+    return function buildFilledFormBytes() {
+      return _ref12.apply(this, arguments);
+    };
+  }();
+  var handleGeneratePDF = /*#__PURE__*/function () {
+    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var b, filledBytes, uint8, binary, chunk, i, dataUrl, a, _t2;
+      return _regenerator().w(function (_context3) {
+        while (1) switch (_context3.p = _context3.n) {
+          case 0:
+            if (!(!pdfReady || !window.PDFLib)) {
+              _context3.n = 1;
+              break;
+            }
+            setError("PDF library not loaded. Please wait and try again.");
+            return _context3.a(2);
+          case 1:
+            setLoading(true);
+            setError("");
+            _context3.p = 2;
+            b = data.borrower;
+            _context3.n = 3;
+            return buildFilledFormBytes();
+          case 3:
+            filledBytes = _context3.v;
+            uint8 = new Uint8Array(filledBytes);
             binary = "";
             chunk = 8192;
             for (i = 0; i < uint8.length; i += chunk) {
               binary += String.fromCharCode.apply(String, _toConsumableArray(uint8.subarray(i, Math.min(i + chunk, uint8.length))));
             }
-            base64pdf = btoa(binary);
-            dataUrl = "data:application/pdf;base64," + base64pdf;
+            dataUrl = "data:application/pdf;base64," + btoa(binary);
             a = document.createElement("a");
             a.href = dataUrl;
             a.download = "Form710_".concat(b.lastName || "Client", ".pdf");
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            _context2.n = 6;
+            _context3.n = 5;
             break;
-          case 5:
-            _context2.p = 5;
-            _t2 = _context2.v;
+          case 4:
+            _context3.p = 4;
+            _t2 = _context3.v;
             setError("PDF generation failed: " + _t2.message);
-          case 6:
-            _context2.p = 6;
+          case 5:
+            _context3.p = 5;
             setLoading(false);
-            return _context2.f(6);
-          case 7:
-            return _context2.a(2);
+            return _context3.f(5);
+          case 6:
+            return _context3.a(2);
         }
-      }, _callee2, null, [[2, 5, 6, 7]]);
+      }, _callee3, null, [[2, 4, 5, 6]]);
     }));
     return function handleGeneratePDF() {
-      return _ref12.apply(this, arguments);
+      return _ref13.apply(this, arguments);
     };
   }();
 
   // ── Cover Letter Generator ─────────────────────────────────────────────────
   var buildCoverLetterBytes = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
       var _window$PDFLib, PDFDocument, StandardFonts, rgb, PDFName, b, p, bName, propAddr, svcName, today, doc, page, helvetica, helveticaBold, _page$getSize, width, height, margin, y, drawText, wrap, body1, body2, body3, _i2, _arr, para, lines, _iterator5, _step5, line, _t3;
-      return _regenerator().w(function (_context3) {
-        while (1) switch (_context3.p = _context3.n) {
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.p = _context4.n) {
           case 0:
-            _context3.p = 0;
+            _context4.p = 0;
             _window$PDFLib = window.PDFLib, PDFDocument = _window$PDFLib.PDFDocument, StandardFonts = _window$PDFLib.StandardFonts, rgb = _window$PDFLib.rgb, PDFName = _window$PDFLib.PDFName;
             b = data.borrower, p = data.property;
             bName = [b.firstName, b.middleName, b.lastName].filter(Boolean).join(" ");
@@ -1298,19 +1312,19 @@ function UBAForm() {
               month: "long",
               day: "numeric"
             });
-            _context3.n = 1;
+            _context4.n = 1;
             return PDFDocument.create();
           case 1:
-            doc = _context3.v;
+            doc = _context4.v;
             page = doc.addPage([612, 792]); // Letter size
-            _context3.n = 2;
+            _context4.n = 2;
             return doc.embedFont(StandardFonts.Helvetica);
           case 2:
-            helvetica = _context3.v;
-            _context3.n = 3;
+            helvetica = _context4.v;
+            _context4.n = 3;
             return doc.embedFont(StandardFonts.HelveticaBold);
           case 3:
-            helveticaBold = _context3.v;
+            helveticaBold = _context4.v;
             _page$getSize = page.getSize(), width = _page$getSize.width, height = _page$getSize.height;
             margin = 72; // 1 inch
             y = height - margin;
@@ -1418,68 +1432,68 @@ function UBAForm() {
             }
             y -= 16;
             drawText("Enclosures: Completed Form 710; Supporting Financial Documentation", margin, y, helvetica, 10);
-            _context3.n = 4;
+            _context4.n = 4;
             return doc.save();
           case 4:
-            return _context3.a(2, _context3.v);
+            return _context4.a(2, _context4.v);
           case 5:
-            _context3.p = 5;
-            _t3 = _context3.v;
+            _context4.p = 5;
+            _t3 = _context4.v;
             throw _t3;
           case 6:
-            return _context3.a(2);
+            return _context4.a(2);
         }
-      }, _callee3, null, [[0, 5]]);
+      }, _callee4, null, [[0, 5]]);
     }));
     return function buildCoverLetterBytes() {
-      return _ref13.apply(this, arguments);
+      return _ref14.apply(this, arguments);
     };
   }();
 
   // ── Combined Package Download (Cover Letter + Form 710) ────────────────────
   var handleGeneratePackage = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-      var PDFDocument, b, coverBytes, pdfBytes, formDoc, coverDoc, merged, coverPages, _iterator6, _step6, p, formPages, _iterator7, _step7, _p, mergedBytes, uint8, binary, chunk, i, dataUrl, a, _t4;
-      return _regenerator().w(function (_context4) {
-        while (1) switch (_context4.p = _context4.n) {
+    var _ref15 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+      var PDFDocument, b, coverBytes, filledBytes, formDoc, coverDoc, merged, coverPages, _iterator6, _step6, p, formPages, _iterator7, _step7, _p, mergedBytes, uint8, binary, chunk, i, dataUrl, a, _t4;
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.p = _context5.n) {
           case 0:
             if (!(!pdfReady || !window.PDFLib)) {
-              _context4.n = 1;
+              _context5.n = 1;
               break;
             }
             setError("PDF library not loaded. Please wait and try again.");
-            return _context4.a(2);
+            return _context5.a(2);
           case 1:
             setLoading(true);
-            _context4.p = 2;
+            _context5.p = 2;
             PDFDocument = window.PDFLib.PDFDocument;
             b = data.borrower; // Build cover letter
-            _context4.n = 3;
+            _context5.n = 3;
             return buildCoverLetterBytes();
           case 3:
-            coverBytes = _context4.v;
-            // Build filled Form 710
-            pdfBytes = Uint8Array.from(atob(FORM710_B64), function (c) {
-              return c.charCodeAt(0);
-            });
-            _context4.n = 4;
-            return PDFDocument.load(pdfBytes, {
+            coverBytes = _context5.v;
+            _context5.n = 4;
+            return buildFilledFormBytes();
+          case 4:
+            filledBytes = _context5.v;
+            _context5.n = 5;
+            return PDFDocument.load(filledBytes, {
               ignoreEncryption: true
             });
-          case 4:
-            formDoc = _context4.v;
-            _context4.n = 5;
-            return PDFDocument.load(coverBytes);
           case 5:
-            coverDoc = _context4.v;
-            _context4.n = 6;
-            return PDFDocument.create();
+            formDoc = _context5.v;
+            _context5.n = 6;
+            return PDFDocument.load(coverBytes);
           case 6:
-            merged = _context4.v;
-            _context4.n = 7;
-            return merged.copyPages(coverDoc, coverDoc.getPageIndices());
+            coverDoc = _context5.v;
+            _context5.n = 7;
+            return PDFDocument.create();
           case 7:
-            coverPages = _context4.v;
+            merged = _context5.v;
+            _context5.n = 8;
+            return merged.copyPages(coverDoc, coverDoc.getPageIndices());
+          case 8:
+            coverPages = _context5.v;
             _iterator6 = _createForOfIteratorHelper(coverPages);
             try {
               for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
@@ -1491,10 +1505,10 @@ function UBAForm() {
             } finally {
               _iterator6.f();
             }
-            _context4.n = 8;
+            _context5.n = 9;
             return merged.copyPages(formDoc, formDoc.getPageIndices());
-          case 8:
-            formPages = _context4.v;
+          case 9:
+            formPages = _context5.v;
             _iterator7 = _createForOfIteratorHelper(formPages);
             try {
               for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
@@ -1506,10 +1520,10 @@ function UBAForm() {
             } finally {
               _iterator7.f();
             }
-            _context4.n = 9;
+            _context5.n = 10;
             return merged.save();
-          case 9:
-            mergedBytes = _context4.v;
+          case 10:
+            mergedBytes = _context5.v;
             uint8 = new Uint8Array(mergedBytes);
             binary = "";
             chunk = 8192;
@@ -1523,23 +1537,23 @@ function UBAForm() {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            _context4.n = 11;
+            _context5.n = 12;
             break;
-          case 10:
-            _context4.p = 10;
-            _t4 = _context4.v;
-            setError("Package generation failed: " + _t4.message);
           case 11:
-            _context4.p = 11;
-            setLoading(false);
-            return _context4.f(11);
+            _context5.p = 11;
+            _t4 = _context5.v;
+            setError("Package generation failed: " + _t4.message);
           case 12:
-            return _context4.a(2);
+            _context5.p = 12;
+            setLoading(false);
+            return _context5.f(12);
+          case 13:
+            return _context5.a(2);
         }
-      }, _callee4, null, [[2, 10, 11, 12]]);
+      }, _callee5, null, [[2, 11, 12, 13]]);
     }));
     return function handleGeneratePackage() {
-      return _ref14.apply(this, arguments);
+      return _ref15.apply(this, arguments);
     };
   }();
 
@@ -2031,9 +2045,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Monthly Obligations (see note)"
-        }].map(function (_ref15) {
-          var k = _ref15.k,
-            l = _ref15.l;
+        }].map(function (_ref16) {
+          var k = _ref16.k,
+            l = _ref16.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
@@ -2084,9 +2098,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Assets (see note above)"
-        }].map(function (_ref16) {
-          var k = _ref16.k,
-            l = _ref16.l;
+        }].map(function (_ref17) {
+          var k = _ref17.k,
+            l = _ref17.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
