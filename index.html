@@ -249,18 +249,14 @@ var STEPS = [{
   Icon: DollarSign
 }, {
   id: 7,
-  label: "Expenses",
-  Icon: ClipboardList
-}, {
-  id: 8,
   label: "Assets",
   Icon: Wallet
 }, {
-  id: 9,
+  id: 8,
   label: "Documents",
   Icon: FileText
 }, {
-  id: 10,
+  id: 9,
   label: "Review",
   Icon: Eye
 }];
@@ -325,17 +321,6 @@ var INIT = {
   },
   bIncome: _objectSpread({}, emptyI),
   cIncome: _objectSpread({}, emptyI),
-  expenses: {
-    firstMortgage: "0",
-    secondMortgage: "0",
-    hoaDues: "0",
-    taxes: "0",
-    insurance: "0",
-    creditCards: "0",
-    installments: "0",
-    alimonyOut: "0",
-    other: "0"
-  },
   assets: {
     checking: "0",
     savings: "0",
@@ -965,9 +950,6 @@ function UBAForm() {
   var setCIncome = useCallback(function (k, v) {
     return setSection("cIncome", k, v);
   }, [setSection]);
-  var setExpenses = useCallback(function (k, v) {
-    return setSection("expenses", k, v);
-  }, [setSection]);
   var setAssets = useCallback(function (k, v) {
     return setSection("assets", k, v);
   }, [setSection]);
@@ -1015,11 +997,6 @@ function UBAForm() {
   var totalIncome = function totalIncome() {
     return sumI(data.bIncome) + (data.hasCoBorrower ? sumI(data.cIncome) : 0);
   };
-  var totalExpense = function totalExpense() {
-    return Object.values(data.expenses).reduce(function (s, v) {
-      return s + (parseFloat(v) || 0);
-    }, 0);
-  };
   var totalAssets = function totalAssets() {
     return Object.values(data.assets).reduce(function (s, v) {
       return s + (parseFloat(v) || 0);
@@ -1040,7 +1017,7 @@ function UBAForm() {
   // ── Email submit ───────────────────────────────────────────────────────────
   var handleSubmit = /*#__PURE__*/function () {
     var _ref11 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var criticalSteps, _i, _criticalSteps, s, err, b, p, h, bName, propAddr, surplus, _t;
+      var criticalSteps, _i, _criticalSteps, s, err, b, p, h, bName, propAddr, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
           case 0:
@@ -1052,7 +1029,7 @@ function UBAForm() {
             return _context.a(2);
           case 1:
             // Validate all critical steps before submitting
-            criticalSteps = [1, 2, 4, 5, 6, 7, 8];
+            criticalSteps = [1, 2, 4, 5, 6, 7];
             _i = 0, _criticalSteps = criticalSteps;
           case 2:
             if (!(_i < _criticalSteps.length)) {
@@ -1078,7 +1055,6 @@ function UBAForm() {
             b = data.borrower, p = data.property, h = data.hardship;
             bName = [b.firstName, b.middleName, b.lastName].filter(Boolean).join(" ");
             propAddr = [p.address, p.city, p.state, p.zip].filter(Boolean).join(", ");
-            surplus = totalIncome() - totalExpense();
             _context.n = 6;
             return window.emailjs.send("service_1m5olao", "template_bxv6jwc", {
               borrower_name: bName || "Not provided",
@@ -1089,8 +1065,6 @@ function UBAForm() {
               hardship_types: (h.types || []).join(", ") || "None selected",
               hardship_date: h.date || "Not provided",
               total_income: "$" + fmt(totalIncome()),
-              total_expenses: "$" + fmt(totalExpense()),
-              surplus: (surplus >= 0 ? "+" : "") + "$" + fmt(Math.abs(surplus)) + (surplus < 0 ? " (deficit)" : ""),
               total_assets: "$" + fmt(totalAssets()),
               hardship_explanation: h.explanation || "Not provided",
               files_list: "Client will email documents separately to bbowin2016@gmail.com"
@@ -1474,7 +1448,7 @@ function UBAForm() {
             return _context5.a(2);
           case 1:
             // Validate all critical steps before generating
-            criticalSteps = [1, 2, 4, 5, 6, 7, 8];
+            criticalSteps = [1, 2, 4, 5, 6, 7];
             _i3 = 0, _criticalSteps2 = criticalSteps;
           case 2:
             if (!(_i3 < _criticalSteps2.length)) {
@@ -1649,21 +1623,11 @@ function UBAForm() {
         }
       case 7:
         {
-          var expFields = ["firstMortgage", "secondMortgage", "hoaDues", "taxes", "insurance", "creditCards", "installments", "alimonyOut", "other"];
-          var _blank = expFields.filter(function (k) {
-            return data.expenses[k] === "" || data.expenses[k] === undefined;
-          });
-          if (_blank.length) return "All expense fields are required. Enter 0 if none applies.";
-          if (!data.expenses.firstMortgage || parseFloat(data.expenses.firstMortgage) === 0) return "First Mortgage Payment is required. Enter your current monthly mortgage payment.";
-          return null;
-        }
-      case 8:
-        {
           var assetFields = ["checking", "savings", "cds", "stocks", "otherRE", "other"];
-          var _blank2 = assetFields.filter(function (k) {
+          var _blank = assetFields.filter(function (k) {
             return data.assets[k] === "" || data.assets[k] === undefined;
           });
-          if (_blank2.length) return "All asset fields are required. Enter 0 if none applies.";
+          if (_blank.length) return "All asset fields are required. Enter 0 if none applies.";
           return null;
         }
       default:
@@ -2060,8 +2024,6 @@ function UBAForm() {
           title: "Monthly Income"
         }), /*#__PURE__*/React.createElement(InstructionBox, {
           text: "Every field below is required. Enter 0 if you have no income from that source. A blank field tells the servicer the question was skipped, not that the answer is zero. These are not the same thing."
-        }), /*#__PURE__*/React.createElement(InstructionBox, {
-          text: "Before you enter a single number, read this. The income and expense sections exist to show your servicer one thing: why you cannot afford your current payment, and whether a modified payment would help. Be accurate. Do not underestimate your monthly expenses. If your numbers make it look like you have $800 left over every month, the servicer will wonder why you need help. Do not exaggerate them either. If your expenses exceed your income by a large amount every month, the servicer may conclude that even a modified payment would be unaffordable, making a modification pointless from their perspective. Most successful modification applicants land right around break-even. A small monthly shortfall shows exactly what it needs to show: that your current payment is the problem, not your overall financial situation. If a reduced payment would make you whole, that is the story these numbers need to tell. Take your time. If the totals do not look right when you finish, go back and check your figures before submitting."
         }), /*#__PURE__*/React.createElement(IncomeBlock, {
           label: "Borrower Income",
           vals: data.bIncome,
@@ -2084,70 +2046,6 @@ function UBAForm() {
           className: "font-bold text-green-700"
         }, "$", fmt(totalIncome()))));
       case 7:
-        return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
-          Icon: ClipboardList,
-          title: "Monthly Expenses"
-        }), /*#__PURE__*/React.createElement(InstructionBox, {
-          text: "Every field below is required. Enter 0 for any expense that does not apply to you. Your first mortgage payment is required and cannot be zero."
-        }), /*#__PURE__*/React.createElement(InstructionBox, {
-          text: "Keep the guidance from the previous step in mind as you complete this section. Income and expenses tell one story together. For credit cards, enter the minimum monthly payment due, not the total balance. For your first mortgage payment, enter your total monthly payment as shown on your statement. If your taxes and insurance are escrowed, that amount already includes them and you should leave the separate tax and insurance fields below blank. If you pay taxes and insurance separately outside of your mortgage payment, enter only the principal and interest in the mortgage field and then enter taxes and insurance in their own fields below. Every housing cost should appear somewhere, but never in two places."
-        }), /*#__PURE__*/React.createElement("div", {
-          className: "grid grid-cols-2 gap-3"
-        }, [{
-          k: "firstMortgage",
-          l: "First Mortgage Payment"
-        }, {
-          k: "secondMortgage",
-          l: "Second Mortgage / HELOC"
-        }, {
-          k: "hoaDues",
-          l: "HOA Dues"
-        }, {
-          k: "taxes",
-          l: "Property Taxes (if not escrowed)"
-        }, {
-          k: "insurance",
-          l: "Insurance (if not escrowed)"
-        }, {
-          k: "creditCards",
-          l: "Credit Card Min. Payments"
-        }, {
-          k: "installments",
-          l: "Auto / Student / Other Loans"
-        }, {
-          k: "alimonyOut",
-          l: "Alimony / Child Support Paid"
-        }, {
-          k: "other",
-          l: "Other Monthly Obligations (see note)"
-        }].map(function (_ref16) {
-          var k = _ref16.k,
-            l = _ref16.l;
-          return /*#__PURE__*/React.createElement(Lbl, {
-            key: k,
-            label: l
-          }, /*#__PURE__*/React.createElement(Inp, {
-            type: "number",
-            value: data.expenses[k],
-            onChange: function onChange(v) {
-              return setExpenses(k, v);
-            },
-            placeholder: "$0.00"
-          }));
-        })), /*#__PURE__*/React.createElement("div", {
-          style: {
-            background: "#fdf2f2",
-            border: "1px solid #f0b8b8"
-          },
-          className: "mt-2 rounded-xl p-3 text-sm"
-        }, /*#__PURE__*/React.createElement("span", {
-          className: "font-semibold text-slate-700"
-        }, "Total Monthly Expenses: "), /*#__PURE__*/React.createElement("span", {
-          className: "font-bold text-red-600"
-        }, "$", fmt(totalExpense()))), /*#__PURE__*/React.createElement(InstructionBox, {
-          text: "For Other Monthly Obligations, examples include: childcare or daycare costs, medical expenses you pay regularly out of pocket, prescription medications, storage unit fees, subscriptions or memberships you cannot cancel, out-of-pocket costs related to your hardship, or any other fixed monthly cost not captured above."
-        }));
-      case 8:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: Wallet,
           title: "Assets"
@@ -2175,9 +2073,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Assets (see note above)"
-        }].map(function (_ref17) {
-          var k = _ref17.k,
-            l = _ref17.l;
+        }].map(function (_ref16) {
+          var k = _ref16.k,
+            l = _ref16.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
@@ -2200,7 +2098,7 @@ function UBAForm() {
         }, "Total Disclosed Assets: "), /*#__PURE__*/React.createElement("span", {
           className: "font-bold text-blue-700"
         }, "$", fmt(totalAssets()))));
-      case 9:
+      case 8:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: FileText,
           title: "Supporting Documents"
@@ -2242,11 +2140,10 @@ function UBAForm() {
         }, "Keep Your Records"), /*#__PURE__*/React.createElement("div", {
           className: "text-sm text-amber-700"
         }, "Keep a copy of everything you send. Also keep a written log of every phone call you have with your servicer: the date, the time, the name of the person you spoke with, and a summary of what was said. If your case ever proceeds to court, that log becomes evidence.")));
-      case 10:
+      case 9:
         {
           var bName = [data.borrower.firstName, data.borrower.middleName, data.borrower.lastName].filter(Boolean).join(" ");
           var cName = [data.coBorrower.firstName, data.coBorrower.lastName].filter(Boolean).join(" ");
-          var surplus = totalIncome() - totalExpense();
           return submitted ? /*#__PURE__*/React.createElement("div", {
             className: "text-center py-10"
           }, /*#__PURE__*/React.createElement(CheckCircle, {
@@ -2353,27 +2250,27 @@ function UBAForm() {
               value: data.hardship.date
             }]
           }), /*#__PURE__*/React.createElement(SummaryCard, {
-            title: "Financials",
+            title: "Income",
             onEdit: function onEdit() {
               return setStep(6);
             },
             items: [{
-              label: "Income",
+              label: "Total Monthly Income",
               value: "$" + fmt(totalIncome())
-            }, {
-              label: "Expenses",
-              value: "$" + fmt(totalExpense())
-            }, {
-              label: "Surplus",
-              value: (surplus >= 0 ? "+" : "") + "$" + fmt(Math.abs(surplus)) + (surplus < 0 ? " (deficit)" : "")
-            }, {
-              label: "Assets",
+            }]
+          }), /*#__PURE__*/React.createElement(SummaryCard, {
+            title: "Assets",
+            onEdit: function onEdit() {
+              return setStep(7);
+            },
+            items: [{
+              label: "Total Assets",
               value: "$" + fmt(totalAssets())
             }]
           }), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Documents",
             onEdit: function onEdit() {
-              return setStep(9);
+              return setStep(8);
             },
             items: [{
               label: "Documents",
@@ -2387,10 +2284,9 @@ function UBAForm() {
               4: "Property & Loan",
               5: "Hardship",
               6: "Monthly Income",
-              7: "Monthly Expenses",
-              8: "Assets"
+              7: "Assets"
             };
-            [1, 2, 4, 5, 6, 7, 8].forEach(function (s) {
+            [1, 2, 4, 5, 6, 7].forEach(function (s) {
               if (validateStep(s)) incomplete.push(labels[s]);
             });
             return incomplete.length > 0 ? /*#__PURE__*/React.createElement("div", {
