@@ -50,7 +50,7 @@ var Home = makeIcon([["path",{d:"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
 var AlertTriangle = makeIcon([["path",{d:"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"}],["line",{x1:"12",y1:"9",x2:"12",y2:"13"}],["line",{x1:"12",y1:"17",x2:"12.01",y2:"17"}]]);
 var DollarSign = makeIcon([["line",{x1:"12",y1:"1",x2:"12",y2:"23"}],["path",{d:"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"}]]);
 var Wallet = makeIcon([["path",{d:"M20 12V22H4V12"}],["path",{d:"M22 7H2v5h20V7z"}],["path",{d:"M12 22V7"}]]);
-var ClipboardList = makeIcon([["rect",{x:"8",y:"2",width:"8",height:"4",rx:"1"}],["path",{d:"M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"}],["line",{x1:"12",y1:"11",x2:"16",y2:"11"}],["line",{x1:"12",y1:"16",x2:"16",y2:"16"}]]);
+var ClipboardList = makeIcon([["rect",{x:"8",y:"2",width:"8",height:"4",rx:"1"}],["path",{d:"M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2\/2"}],["line",{x1:"12",y1:"11",x2:"16",y2:"11"}],["line",{x1:"12",y1:"16",x2:"16",y2:"16"}]]);
 var Eye = makeIcon([["path",{d:"M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"}],["circle",{cx:"12",cy:"12",r:"3"}]]);
 var _excluded = ["value", "onChange", "placeholder", "type"];
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -851,6 +851,54 @@ var IncomeBlock = memo(function (_ref1) {
 });
 var STORAGE_KEY = "bowinlaw_uba_session";
 
+// Crops whitespace from a signature canvas data URL, returns trimmed base64 PNG
+var cropSignature = function cropSignature(dataUrl) {
+  return new Promise(function (resolve) {
+    var img = new Image();
+    img.onload = function () {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      var pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var data = pixels.data;
+      var minX = canvas.width,
+        maxX = 0,
+        minY = canvas.height,
+        maxY = 0;
+      for (var y = 0; y < canvas.height; y++) {
+        for (var x = 0; x < canvas.width; x++) {
+          var alpha = data[(y * canvas.width + x) * 4 + 3];
+          if (alpha > 10) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+      if (maxX < minX || maxY < minY) {
+        resolve(dataUrl);
+        return;
+      }
+      // Add small padding
+      var pad = 4;
+      minX = Math.max(0, minX - pad);
+      minY = Math.max(0, minY - pad);
+      maxX = Math.min(canvas.width, maxX + pad);
+      maxY = Math.min(canvas.height, maxY + pad);
+      var cropped = document.createElement("canvas");
+      cropped.width = maxX - minX;
+      cropped.height = maxY - minY;
+      var cCtx = cropped.getContext("2d");
+      cCtx.drawImage(canvas, minX, minY, cropped.width, cropped.height, 0, 0, cropped.width, cropped.height);
+      resolve(cropped.toDataURL("image/png"));
+    };
+    img.src = dataUrl;
+  });
+};
+
 // ── Signature Pad Component ────────────────────────────────────────────────
 var SignaturePad = memo(function (_ref11) {
   var label = _ref11.label,
@@ -912,7 +960,9 @@ var SignaturePad = memo(function (_ref11) {
     isDrawing.current = false;
     var canvas = canvasRef.current;
     if (!canvas) return;
-    onSave(canvas.toDataURL("image/png"));
+    cropSignature(canvas.toDataURL("image/png")).then(function (cropped) {
+      return onSave(cropped);
+    });
   };
   var clear = function clear() {
     var canvas = canvasRef.current;
@@ -1255,7 +1305,7 @@ function UBAForm() {
   // ── Shared: build filled Form 710 bytes ──────────────────────────────────
   var buildFilledFormBytes = /*#__PURE__*/function () {
     var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-      var PDFDocument, pdfBytes, pdfDoc, form, b, c, p, h, as, bName, cName, propAddr, mailAddr, pref, occ, ht, dur, PHONE, PREF, PT, OC, GL, today, pages, p4, rgb, sigBase64, sigBytes, sigImg, sigHeight, sigY, coSigBase64, coSigBytes, coSigImg, coSigHeight, coSigY, _t2, _t3;
+      var PDFDocument, pdfBytes, pdfDoc, form, b, c, p, h, as, bName, cName, propAddr, mailAddr, pref, occ, ht, dur, PHONE, PREF, PT, OC, GL, today, pages, p4, rgb, sigBase64, sigBytes, sigImg, coSigBase64, coSigBytes, coSigImg, _t2, _t3;
       return _regenerator().w(function (_context2) {
         while (1) switch (_context2.p = _context2.n) {
           case 0:
@@ -1383,12 +1433,13 @@ function UBAForm() {
             sigImg = _context2.v;
             // Borrower signature line is to the left of Date field at y~419
             // Page coords in pdf-lib are bottom-up, page height = 792
-            sigHeight = 792 - 438; // bottom of Date field
-            sigY = sigHeight - 5;
+            // Place signature ON the line: bottom of sig aligns with bottom of Date field
+            // Date field bottom in pdf-lib coords: 792 - 438 = 354
+            // Draw sig 28pt tall, baseline at 354, so y = 354 (pdf-lib y is bottom-left)
             p4.drawImage(sigImg, {
-              x: 57,
-              y: sigY,
-              width: 320,
+              x: 130,
+              y: 354,
+              width: 260,
               height: 24,
               opacity: 1
             });
@@ -1413,12 +1464,11 @@ function UBAForm() {
           case 7:
             coSigImg = _context2.v;
             // Co-borrower line is ~39 points below borrower
-            coSigHeight = 792 - 477;
-            coSigY = coSigHeight - 5;
+            // Co-borrower line: Date_2 bottom at 792 - 477 = 315
             p4.drawImage(coSigImg, {
-              x: 57,
-              y: coSigY,
-              width: 320,
+              x: 130,
+              y: 315,
+              width: 260,
               height: 24,
               opacity: 1
             });
@@ -1638,15 +1688,15 @@ function UBAForm() {
             return doc.embedPng(sigBytes);
           case 5:
             sigImg = _context4.v;
-            sigDims = sigImg.scaleToFit(200, 50);
+            sigDims = sigImg.scaleToFit(200, 50); // Place sig so its baseline sits on the underscore line
             page.drawImage(sigImg, {
               x: margin,
-              y: y - sigDims.height + 10,
+              y: y - sigDims.height + 14,
               width: sigDims.width,
               height: sigDims.height,
               opacity: 1
             });
-            y -= sigDims.height;
+            y -= Math.max(sigDims.height - 14, 8);
             _context4.n = 7;
             break;
           case 6:
