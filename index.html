@@ -1051,7 +1051,7 @@ function UBAForm() {
   var _useState = useState(function () {
       try {
         var saved = localStorage.getItem(STORAGE_KEY + "_step");
-        if (saved) return Math.max(1, Math.min(9, parseInt(saved) || 1));
+        if (saved) return Math.max(1, Math.min(11, parseInt(saved) || 1));
       } catch (e) {}
       return 1;
     }),
@@ -1997,42 +1997,7 @@ function UBAForm() {
   var renderStep = function renderStep() {
     switch (step) {
       case 1:
-        return /*#__PURE__*/React.createElement("div", null, function () {
-          try {
-            var _s = localStorage.getItem(STORAGE_KEY);
-            if (_s) {
-              var _p = JSON.parse(_s);
-              if (_p && (_p.servicer || _p.borrower && _p.borrower.firstName)) {
-                return /*#__PURE__*/React.createElement("div", {
-                  style: {
-                    background: "#fffbeb",
-                    border: "1px solid #f0d090"
-                  },
-                  className: "rounded-xl p-4 mb-4 flex items-center justify-between gap-3"
-                }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-                  className: "text-sm font-semibold text-amber-800"
-                }, "Saved session found"), /*#__PURE__*/React.createElement("div", {
-                  className: "text-xs text-amber-700 mt-0.5"
-                }, "Your previous answers have been restored. You can continue where you left off.")), /*#__PURE__*/React.createElement("button", {
-                  onClick: function onClick() {
-                    try {
-                      localStorage.removeItem(STORAGE_KEY);
-                      localStorage.removeItem(STORAGE_KEY + "_step");
-                      localStorage.removeItem(STORAGE_KEY + "_sig");
-                      localStorage.removeItem(STORAGE_KEY + "_cosig");
-                    } catch (e) {}
-                    setData(INIT);
-                    setSignature("");
-                    setCoSignature("");
-                    setStep(1);
-                  },
-                  className: "text-xs font-semibold text-amber-800 underline whitespace-nowrap flex-shrink-0"
-                }, "Start over"));
-              }
-            }
-          } catch (e) {}
-          return null;
-        }(), /*#__PURE__*/React.createElement("div", {
+        return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
           style: {
             background: NAV_COLOR,
             borderRadius: "12px"
@@ -2260,6 +2225,69 @@ function UBAForm() {
           className: "font-semibold text-slate-800"
         }, "If you need help at any point."), " Email Bowin Law Group at ", /*#__PURE__*/React.createElement("strong", null, "bbowin2016@gmail.com"), ". We are here to help you through this process.")))));
       case 3:
+        return /*#__PURE__*/React.createElement("div", null, function () {
+          try {
+            var _s = localStorage.getItem(STORAGE_KEY);
+            if (_s) {
+              var _p = JSON.parse(_s);
+              if (_p && (_p.servicer || _p.borrower && _p.borrower.firstName)) {
+                return /*#__PURE__*/React.createElement("div", {
+                  style: {
+                    background: "#fffbeb",
+                    border: "1px solid #f0d090"
+                  },
+                  className: "rounded-xl p-4 mb-4 flex items-center justify-between gap-3"
+                }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+                  className: "text-sm font-semibold text-amber-800"
+                }, "Saved session found"), /*#__PURE__*/React.createElement("div", {
+                  className: "text-xs text-amber-700 mt-0.5"
+                }, "Your previous answers have been restored. You can continue where you left off.")), /*#__PURE__*/React.createElement("button", {
+                  onClick: function onClick() {
+                    try {
+                      localStorage.removeItem(STORAGE_KEY);
+                      localStorage.removeItem(STORAGE_KEY + "_step");
+                      localStorage.removeItem(STORAGE_KEY + "_sig");
+                      localStorage.removeItem(STORAGE_KEY + "_cosig");
+                    } catch (e) {}
+                    setData(INIT);
+                    setSignature("");
+                    setCoSignature("");
+                    setStep(1);
+                  },
+                  className: "text-xs font-semibold text-amber-800 underline whitespace-nowrap flex-shrink-0"
+                }, "Start over"));
+              }
+            }
+          } catch (e) {}
+          return null;
+        }(), /*#__PURE__*/React.createElement(SectionHeader, {
+          Icon: Building2,
+          title: "Loan Servicer"
+        }), /*#__PURE__*/React.createElement(InstructionBox, {
+          text: "Your mortgage servicer is the company you send your payments to each month. Their name appears on your monthly statement and in your online payment portal. If your loan has been transferred recently, use the name of the company currently accepting your payments."
+        }), /*#__PURE__*/React.createElement(Lbl, {
+          label: "Select your mortgage servicer",
+          required: true
+        }, /*#__PURE__*/React.createElement(Sel, {
+          value: data.servicer,
+          onChange: function onChange(v) {
+            return setTopLevel("servicer", v);
+          }
+        }, /*#__PURE__*/React.createElement("option", {
+          value: ""
+        }, "-- Select your servicer --"), SERVICERS.filter(function (s) {
+          return s.name !== "Other / Not Listed";
+        }).map(function (s) {
+          return /*#__PURE__*/React.createElement("option", {
+            key: s.name,
+            value: s.name
+          }, s.name);
+        }), /*#__PURE__*/React.createElement("option", {
+          value: "Other / Not Listed"
+        }, "Other / Not Listed"))), data.servicer === "Other / Not Listed" && /*#__PURE__*/React.createElement(InstructionBox, {
+          text: "If your servicer is not listed, call the number on your mortgage statement and ask to speak with the Loss Mitigation department. They can tell you how to submit a mortgage assistance application and what documents they require."
+        }));
+      case 4:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: User,
           title: "Borrower Information"
@@ -2270,7 +2298,7 @@ function UBAForm() {
           onChange: setBorrower,
           isCoB: false
         }));
-      case 4:
+      case 5:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: Users,
           title: "Co-Borrower Information"
@@ -2298,7 +2326,7 @@ function UBAForm() {
           onChange: setCoBorrower,
           isCoB: true
         })));
-      case 5:
+      case 6:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: Home,
           title: "Property and Loan Information"
@@ -2431,7 +2459,7 @@ function UBAForm() {
         })), /*#__PURE__*/React.createElement("div", {
           className: "grid grid-cols-2 gap-3"
         }));
-      case 6:
+      case 7:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: AlertTriangle,
           title: "Hardship Information"
@@ -2540,7 +2568,7 @@ function UBAForm() {
             label: "No"
           }]
         })));
-      case 7:
+      case 8:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: DollarSign,
           title: "Monthly Income"
@@ -2567,7 +2595,7 @@ function UBAForm() {
         }, "Total Monthly Income: "), /*#__PURE__*/React.createElement("span", {
           className: "font-bold text-green-700"
         }, "$", fmt(totalIncome()))));
-      case 8:
+      case 9:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: Wallet,
           title: "Assets"
@@ -2620,7 +2648,7 @@ function UBAForm() {
         }, "Total Disclosed Assets: "), /*#__PURE__*/React.createElement("span", {
           className: "font-bold text-blue-700"
         }, "$", fmt(totalAssets()))));
-      case 9:
+      case 10:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: FileText,
           title: "Supporting Documents"
@@ -2662,7 +2690,7 @@ function UBAForm() {
         }, "Keep Your Records"), /*#__PURE__*/React.createElement("div", {
           className: "text-sm text-amber-700"
         }, "Keep a copy of everything you send. Also keep a written log of every phone call you have with your servicer: the date, the time, the name of the person you spoke with, and a summary of what was said. If your case ever proceeds to court, that log becomes evidence.")));
-      case 10:
+      case 11:
         {
           var bName = [data.borrower.firstName, data.borrower.middleName, data.borrower.lastName].filter(Boolean).join(" ");
           var cName = [data.coBorrower.firstName, data.coBorrower.lastName].filter(Boolean).join(" ");
@@ -2699,7 +2727,7 @@ function UBAForm() {
           }, "Bowin Law Group will review your application and follow up with you directly.")), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Servicer",
             onEdit: function onEdit() {
-              return setStep(1);
+              return setStep(3);
             },
             items: [{
               label: "Servicer",
@@ -2714,7 +2742,7 @@ function UBAForm() {
           }), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Borrower",
             onEdit: function onEdit() {
-              return setStep(3);
+              return setStep(4);
             },
             items: [{
               label: "Name",
@@ -2735,7 +2763,7 @@ function UBAForm() {
           }), data.hasCoBorrower && /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Co-Borrower",
             onEdit: function onEdit() {
-              return setStep(4);
+              return setStep(5);
             },
             items: [{
               label: "Name",
@@ -2747,7 +2775,7 @@ function UBAForm() {
           }), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Property",
             onEdit: function onEdit() {
-              return setStep(5);
+              return setStep(6);
             },
             items: [{
               label: "Address",
@@ -2759,7 +2787,7 @@ function UBAForm() {
           }), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Hardship",
             onEdit: function onEdit() {
-              return setStep(6);
+              return setStep(7);
             },
             items: [{
               label: "Goal",
@@ -2774,7 +2802,7 @@ function UBAForm() {
           }), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Income",
             onEdit: function onEdit() {
-              return setStep(7);
+              return setStep(8);
             },
             items: [{
               label: "Total Monthly Income",
@@ -2783,7 +2811,7 @@ function UBAForm() {
           }), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Assets",
             onEdit: function onEdit() {
-              return setStep(8);
+              return setStep(9);
             },
             items: [{
               label: "Total Assets",
@@ -2792,7 +2820,7 @@ function UBAForm() {
           }), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Documents",
             onEdit: function onEdit() {
-              return setStep(9);
+              return setStep(10);
             },
             items: [{
               label: "Documents",
