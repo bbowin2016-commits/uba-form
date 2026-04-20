@@ -851,6 +851,117 @@ var IncomeBlock = memo(function (_ref1) {
 });
 var STORAGE_KEY = "bowinlaw_uba_session";
 
+// ── Signature Pad Component ────────────────────────────────────────────────
+var SignaturePad = memo(function (_ref11) {
+  var label = _ref11.label,
+    onSave = _ref11.onSave,
+    value = _ref11.value,
+    canvasRef = _ref11.canvasRef;
+  var isDrawing = useRef(false);
+  var lastPos = useRef({
+    x: 0,
+    y: 0
+  });
+  var getPos = function getPos(e, canvas) {
+    var rect = canvas.getBoundingClientRect();
+    var scaleX = canvas.width / rect.width;
+    var scaleY = canvas.height / rect.height;
+    if (e.touches) {
+      return {
+        x: (e.touches[0].clientX - rect.left) * scaleX,
+        y: (e.touches[0].clientY - rect.top) * scaleY
+      };
+    }
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  };
+  var startDraw = function startDraw(e) {
+    e.preventDefault();
+    var canvas = canvasRef.current;
+    if (!canvas) return;
+    isDrawing.current = true;
+    var pos = getPos(e, canvas);
+    lastPos.current = pos;
+    var ctx = canvas.getContext("2d");
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 1, 0, Math.PI * 2);
+    ctx.fillStyle = "#1a1a2e";
+    ctx.fill();
+  };
+  var draw = function draw(e) {
+    e.preventDefault();
+    if (!isDrawing.current) return;
+    var canvas = canvasRef.current;
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    var pos = getPos(e, canvas);
+    ctx.beginPath();
+    ctx.moveTo(lastPos.current.x, lastPos.current.y);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.strokeStyle = "#1a1a2e";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+    lastPos.current = pos;
+  };
+  var stopDraw = function stopDraw(e) {
+    if (!isDrawing.current) return;
+    isDrawing.current = false;
+    var canvas = canvasRef.current;
+    if (!canvas) return;
+    onSave(canvas.toDataURL("image/png"));
+  };
+  var clear = function clear() {
+    var canvas = canvasRef.current;
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    onSave("");
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "mt-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between mb-1"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-sm font-semibold text-slate-700"
+  }, label), value && /*#__PURE__*/React.createElement("button", {
+    onClick: clear,
+    className: "text-xs text-red-500 hover:text-red-700 font-medium"
+  }, "Clear")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      border: "1.5px solid #c2d0e8",
+      borderRadius: "12px",
+      background: "#f8fafc",
+      touchAction: "none",
+      cursor: "crosshair",
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("canvas", {
+    ref: canvasRef,
+    width: 560,
+    height: 120,
+    style: {
+      width: "100%",
+      height: "80px",
+      display: "block"
+    },
+    onMouseDown: startDraw,
+    onMouseMove: draw,
+    onMouseUp: stopDraw,
+    onMouseLeave: stopDraw,
+    onTouchStart: startDraw,
+    onTouchMove: draw,
+    onTouchEnd: stopDraw
+  })), !value && /*#__PURE__*/React.createElement("div", {
+    className: "text-xs text-slate-400 mt-1 text-center"
+  }, "Sign above using your finger or mouse"), value && /*#__PURE__*/React.createElement("div", {
+    className: "text-xs text-green-600 mt-1 text-center"
+  }, "Signature captured"));
+});
+
 // ── Main component ────────────────────────────────────────────────────────────
 function UBAForm() {
   var _useState = useState(function () {
@@ -893,6 +1004,28 @@ function UBAForm() {
     _useState12 = _slicedToArray(_useState11, 2),
     validErr = _useState12[0],
     setValidErr = _useState12[1];
+  var _useState13 = useState(function () {
+      try {
+        return localStorage.getItem(STORAGE_KEY + "_sig") || "";
+      } catch (e) {
+        return "";
+      }
+    }),
+    _useState14 = _slicedToArray(_useState13, 2),
+    signature = _useState14[0],
+    setSignature = _useState14[1];
+  var _useState15 = useState(function () {
+      try {
+        return localStorage.getItem(STORAGE_KEY + "_cosig") || "";
+      } catch (e) {
+        return "";
+      }
+    }),
+    _useState16 = _slicedToArray(_useState15, 2),
+    coSignature = _useState16[0],
+    setCoSignature = _useState16[1];
+  var sigCanvasRef = useRef();
+  var coSigCanvasRef = useRef();
   var fileRef = useRef();
   var topRef = useRef();
   useEffect(function () {
@@ -937,6 +1070,8 @@ function UBAForm() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       localStorage.setItem(STORAGE_KEY + "_step", String(step));
+      if (signature) localStorage.setItem(STORAGE_KEY + "_sig", signature);
+      if (coSignature) localStorage.setItem(STORAGE_KEY + "_cosig", coSignature);
     } catch (e) {}
   }, [data, step]);
 
@@ -1035,7 +1170,7 @@ function UBAForm() {
 
   // ── Email submit ───────────────────────────────────────────────────────────
   var handleSubmit = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
       var criticalSteps, _i, _criticalSteps, s, err, b, p, h, bName, propAddr, _t;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.p = _context.n) {
@@ -1093,6 +1228,8 @@ function UBAForm() {
             try {
               localStorage.removeItem(STORAGE_KEY);
               localStorage.removeItem(STORAGE_KEY + "_step");
+              localStorage.removeItem(STORAGE_KEY + "_sig");
+              localStorage.removeItem(STORAGE_KEY + "_cosig");
             } catch (e) {}
             _context.n = 8;
             break;
@@ -1110,17 +1247,17 @@ function UBAForm() {
       }, _callee, null, [[5, 7, 8, 9]]);
     }));
     return function handleSubmit() {
-      return _ref11.apply(this, arguments);
+      return _ref12.apply(this, arguments);
     };
   }();
 
   // ── PDF generation ─────────────────────────────────────────────────────────
   // ── Shared: build filled Form 710 bytes ──────────────────────────────────
   var buildFilledFormBytes = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-      var PDFDocument, pdfBytes, pdfDoc, form, b, c, p, h, as, bName, cName, propAddr, mailAddr, pref, occ, ht, dur, PHONE, PREF, PT, OC, GL, today;
+    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+      var PDFDocument, pdfBytes, pdfDoc, form, b, c, p, h, as, bName, cName, propAddr, mailAddr, pref, occ, ht, dur, PHONE, PREF, PT, OC, GL, today, pages, p4, rgb, sigBase64, sigBytes, sigImg, sigHeight, sigY, coSigBase64, coSigBytes, coSigImg, coSigHeight, coSigY, _t2, _t3;
       return _regenerator().w(function (_context2) {
-        while (1) switch (_context2.n) {
+        while (1) switch (_context2.p = _context2.n) {
           case 0:
             PDFDocument = window.PDFLib.PDFDocument;
             pdfBytes = Uint8Array.from(atob(FORM710_B64), function (c) {
@@ -1227,20 +1364,85 @@ function UBAForm() {
             today = new Date().toLocaleDateString("en-US");
             setTextField(form, "Date", today);
             if (data.hasCoBorrower) setTextField(form, "Date_2", today);
-            _context2.n = 2;
+            // Embed signature images on page 4
+            pages = pdfDoc.getPages();
+            p4 = pages[3];
+            rgb = window.PDFLib.rgb;
+            if (!(signature && signature.startsWith("data:image/png"))) {
+              _context2.n = 5;
+              break;
+            }
+            _context2.p = 2;
+            sigBase64 = signature.split(",")[1];
+            sigBytes = Uint8Array.from(atob(sigBase64), function (c) {
+              return c.charCodeAt(0);
+            });
+            _context2.n = 3;
+            return pdfDoc.embedPng(sigBytes);
+          case 3:
+            sigImg = _context2.v;
+            // Borrower signature line is to the left of Date field at y~419
+            // Page coords in pdf-lib are bottom-up, page height = 792
+            sigHeight = 792 - 438; // bottom of Date field
+            sigY = sigHeight - 5;
+            p4.drawImage(sigImg, {
+              x: 57,
+              y: sigY,
+              width: 320,
+              height: 24,
+              opacity: 1
+            });
+            _context2.n = 5;
+            break;
+          case 4:
+            _context2.p = 4;
+            _t2 = _context2.v;
+            console.warn("Form sig embed failed:", _t2.message);
+          case 5:
+            if (!(data.hasCoBorrower && coSignature && coSignature.startsWith("data:image/png"))) {
+              _context2.n = 9;
+              break;
+            }
+            _context2.p = 6;
+            coSigBase64 = coSignature.split(",")[1];
+            coSigBytes = Uint8Array.from(atob(coSigBase64), function (c) {
+              return c.charCodeAt(0);
+            });
+            _context2.n = 7;
+            return pdfDoc.embedPng(coSigBytes);
+          case 7:
+            coSigImg = _context2.v;
+            // Co-borrower line is ~39 points below borrower
+            coSigHeight = 792 - 477;
+            coSigY = coSigHeight - 5;
+            p4.drawImage(coSigImg, {
+              x: 57,
+              y: coSigY,
+              width: 320,
+              height: 24,
+              opacity: 1
+            });
+            _context2.n = 9;
+            break;
+          case 8:
+            _context2.p = 8;
+            _t3 = _context2.v;
+            console.warn("Co-sig embed failed:", _t3.message);
+          case 9:
+            _context2.n = 10;
             return pdfDoc.save();
-          case 2:
+          case 10:
             return _context2.a(2, _context2.v);
         }
-      }, _callee2);
+      }, _callee2, null, [[6, 8], [2, 4]]);
     }));
     return function buildFilledFormBytes() {
-      return _ref12.apply(this, arguments);
+      return _ref13.apply(this, arguments);
     };
   }();
   var handleGeneratePDF = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-      var b, filledBytes, uint8, binary, chunk, i, dataUrl, blob1, blobUrl1, a, _t2;
+    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+      var b, filledBytes, uint8, binary, chunk, i, dataUrl, blob1, blobUrl1, a, _t4;
       return _regenerator().w(function (_context3) {
         while (1) switch (_context3.p = _context3.n) {
           case 0:
@@ -1284,8 +1486,8 @@ function UBAForm() {
             break;
           case 4:
             _context3.p = 4;
-            _t2 = _context3.v;
-            setError("PDF generation failed: " + _t2.message);
+            _t4 = _context3.v;
+            setError("PDF generation failed: " + _t4.message);
           case 5:
             _context3.p = 5;
             setLoading(false);
@@ -1296,14 +1498,14 @@ function UBAForm() {
       }, _callee3, null, [[2, 4, 5, 6]]);
     }));
     return function handleGeneratePDF() {
-      return _ref13.apply(this, arguments);
+      return _ref14.apply(this, arguments);
     };
   }();
 
   // ── Cover Letter Generator ─────────────────────────────────────────────────
   var buildCoverLetterBytes = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-      var _window$PDFLib, PDFDocument, StandardFonts, rgb, PDFName, b, p, bName, propAddr, svcName, today, doc, page, helvetica, helveticaBold, _page$getSize, width, height, margin, y, drawText, wrap, body1, body2, body3, _i2, _arr, para, lines, _iterator5, _step5, line, _t3;
+    var _ref15 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+      var _window$PDFLib, PDFDocument, StandardFonts, rgb, PDFName, b, p, bName, propAddr, svcName, today, doc, page, helvetica, helveticaBold, _page$getSize, width, height, margin, y, drawText, wrap, body1, body2, body3, _i2, _arr, para, lines, _iterator5, _step5, line, sigBase64, sigBytes, sigImg, sigDims, _t5, _t6;
       return _regenerator().w(function (_context4) {
         while (1) switch (_context4.p = _context4.n) {
           case 0:
@@ -1421,7 +1623,38 @@ function UBAForm() {
             }
             y -= 8;
             drawText("Sincerely,", margin, y, helvetica, 11);
-            y -= 48;
+            y -= 56;
+            // Embed borrower signature image if provided
+            if (!(signature && signature.startsWith("data:image/png"))) {
+              _context4.n = 7;
+              break;
+            }
+            _context4.p = 4;
+            sigBase64 = signature.split(",")[1];
+            sigBytes = Uint8Array.from(atob(sigBase64), function (c) {
+              return c.charCodeAt(0);
+            });
+            _context4.n = 5;
+            return doc.embedPng(sigBytes);
+          case 5:
+            sigImg = _context4.v;
+            sigDims = sigImg.scaleToFit(200, 50);
+            page.drawImage(sigImg, {
+              x: margin,
+              y: y - sigDims.height + 10,
+              width: sigDims.width,
+              height: sigDims.height,
+              opacity: 1
+            });
+            y -= sigDims.height;
+            _context4.n = 7;
+            break;
+          case 6:
+            _context4.p = 6;
+            _t5 = _context4.v;
+            console.warn("Sig embed failed:", _t5.message);
+            y -= 10;
+          case 7:
             drawText("_________________________________", margin, y, helvetica, 11);
             y -= 16;
             drawText(bName, margin, y, helveticaBold, 11);
@@ -1438,28 +1671,28 @@ function UBAForm() {
             }
             y -= 16;
             drawText("Enclosures: Completed Form 710; Supporting Financial Documentation", margin, y, helvetica, 10);
-            _context4.n = 4;
+            _context4.n = 8;
             return doc.save();
-          case 4:
+          case 8:
             return _context4.a(2, _context4.v);
-          case 5:
-            _context4.p = 5;
-            _t3 = _context4.v;
-            throw _t3;
-          case 6:
+          case 9:
+            _context4.p = 9;
+            _t6 = _context4.v;
+            throw _t6;
+          case 10:
             return _context4.a(2);
         }
-      }, _callee4, null, [[0, 5]]);
+      }, _callee4, null, [[4, 6], [0, 9]]);
     }));
     return function buildCoverLetterBytes() {
-      return _ref14.apply(this, arguments);
+      return _ref15.apply(this, arguments);
     };
   }();
 
   // ── Combined Package Download (Cover Letter + Form 710) ────────────────────
   var handleGeneratePackage = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-      var criticalSteps, _i3, _criticalSteps2, s, err, PDFDocument, b, coverBytes, filledBytes, formDoc, coverDoc, merged, coverPages, _iterator6, _step6, p, formPages, _iterator7, _step7, _p, mergedBytes, uint8, binary, chunk, i, dataUrl, blob2, blobUrl2, a, _t4;
+    var _ref16 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+      var criticalSteps, _i3, _criticalSteps2, s, err, PDFDocument, b, coverBytes, filledBytes, formDoc, coverDoc, merged, coverPages, _iterator6, _step6, p, formPages, _iterator7, _step7, _p, mergedBytes, uint8, binary, chunk, i, dataUrl, blob2, blobUrl2, a, _t7;
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.p = _context5.n) {
           case 0:
@@ -1492,35 +1725,49 @@ function UBAForm() {
             _context5.n = 2;
             break;
           case 4:
+            if (signature) {
+              _context5.n = 5;
+              break;
+            }
+            setError("Please sign the application before downloading.");
+            return _context5.a(2);
+          case 5:
+            if (!(data.hasCoBorrower && !coSignature)) {
+              _context5.n = 6;
+              break;
+            }
+            setError("Co-borrower signature is required before downloading.");
+            return _context5.a(2);
+          case 6:
             setLoading(true);
-            _context5.p = 5;
+            _context5.p = 7;
             PDFDocument = window.PDFLib.PDFDocument;
             b = data.borrower; // Build cover letter
-            _context5.n = 6;
-            return buildCoverLetterBytes();
-          case 6:
-            coverBytes = _context5.v;
-            _context5.n = 7;
-            return buildFilledFormBytes();
-          case 7:
-            filledBytes = _context5.v;
             _context5.n = 8;
+            return buildCoverLetterBytes();
+          case 8:
+            coverBytes = _context5.v;
+            _context5.n = 9;
+            return buildFilledFormBytes();
+          case 9:
+            filledBytes = _context5.v;
+            _context5.n = 10;
             return PDFDocument.load(filledBytes, {
               ignoreEncryption: true
             });
-          case 8:
-            formDoc = _context5.v;
-            _context5.n = 9;
-            return PDFDocument.load(coverBytes);
-          case 9:
-            coverDoc = _context5.v;
-            _context5.n = 10;
-            return PDFDocument.create();
           case 10:
-            merged = _context5.v;
+            formDoc = _context5.v;
             _context5.n = 11;
-            return merged.copyPages(coverDoc, coverDoc.getPageIndices());
+            return PDFDocument.load(coverBytes);
           case 11:
+            coverDoc = _context5.v;
+            _context5.n = 12;
+            return PDFDocument.create();
+          case 12:
+            merged = _context5.v;
+            _context5.n = 13;
+            return merged.copyPages(coverDoc, coverDoc.getPageIndices());
+          case 13:
             coverPages = _context5.v;
             _iterator6 = _createForOfIteratorHelper(coverPages);
             try {
@@ -1533,9 +1780,9 @@ function UBAForm() {
             } finally {
               _iterator6.f();
             }
-            _context5.n = 12;
+            _context5.n = 14;
             return merged.copyPages(formDoc, formDoc.getPageIndices());
-          case 12:
+          case 14:
             formPages = _context5.v;
             _iterator7 = _createForOfIteratorHelper(formPages);
             try {
@@ -1548,9 +1795,9 @@ function UBAForm() {
             } finally {
               _iterator7.f();
             }
-            _context5.n = 13;
+            _context5.n = 15;
             return merged.save();
-          case 13:
+          case 15:
             mergedBytes = _context5.v;
             uint8 = new Uint8Array(mergedBytes);
             binary = "";
@@ -1573,23 +1820,23 @@ function UBAForm() {
             setTimeout(function () {
               return URL.revokeObjectURL(blobUrl2);
             }, 10000);
-            _context5.n = 15;
+            _context5.n = 17;
             break;
-          case 14:
-            _context5.p = 14;
-            _t4 = _context5.v;
-            setError("Package generation failed: " + _t4.message);
-          case 15:
-            _context5.p = 15;
-            setLoading(false);
-            return _context5.f(15);
           case 16:
+            _context5.p = 16;
+            _t7 = _context5.v;
+            setError("Package generation failed: " + _t7.message);
+          case 17:
+            _context5.p = 17;
+            setLoading(false);
+            return _context5.f(17);
+          case 18:
             return _context5.a(2);
         }
-      }, _callee5, null, [[5, 14, 15, 16]]);
+      }, _callee5, null, [[7, 16, 17, 18]]);
     }));
     return function handleGeneratePackage() {
-      return _ref15.apply(this, arguments);
+      return _ref16.apply(this, arguments);
     };
   }();
 
@@ -1718,6 +1965,8 @@ function UBAForm() {
                   try {
                     localStorage.removeItem(STORAGE_KEY);
                     localStorage.removeItem(STORAGE_KEY + "_step");
+                    localStorage.removeItem(STORAGE_KEY + "_sig");
+                    localStorage.removeItem(STORAGE_KEY + "_cosig");
                   } catch (e) {}
                   setData(INIT);
                   setStep(1);
@@ -2109,9 +2358,9 @@ function UBAForm() {
         }, {
           k: "other",
           l: "Other Assets (see note above)"
-        }].map(function (_ref16) {
-          var k = _ref16.k,
-            l = _ref16.l;
+        }].map(function (_ref17) {
+          var k = _ref17.k,
+            l = _ref17.l;
           return /*#__PURE__*/React.createElement(Lbl, {
             key: k,
             label: l
@@ -2312,7 +2561,30 @@ function UBAForm() {
               label: "Documents",
               value: "Gather and save in a folder for portal upload"
             }]
-          }), function () {
+          }), /*#__PURE__*/React.createElement("div", {
+            style: {
+              border: "1px solid #c2d0e8",
+              borderRadius: "12px"
+            },
+            className: "p-4 mt-1"
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "text-xs font-bold uppercase tracking-widest mb-1",
+            style: {
+              color: NAV_COLOR
+            }
+          }, "Borrower Signature"), /*#__PURE__*/React.createElement("div", {
+            className: "text-xs text-slate-500 mb-2"
+          }, "By signing below you certify that all information in this application is true and accurate to the best of your knowledge."), /*#__PURE__*/React.createElement(SignaturePad, {
+            label: "Borrower Signature",
+            value: signature,
+            onSave: setSignature,
+            canvasRef: sigCanvasRef
+          }), data.hasCoBorrower && /*#__PURE__*/React.createElement(SignaturePad, {
+            label: "Co-Borrower Signature",
+            value: coSignature,
+            onSave: setCoSignature,
+            canvasRef: coSigCanvasRef
+          })), function () {
             var incomplete = [];
             var labels = {
               1: "Servicer",
@@ -2322,6 +2594,8 @@ function UBAForm() {
               6: "Monthly Income",
               7: "Assets"
             };
+            if (!signature) incomplete.push("Borrower Signature");
+            if (data.hasCoBorrower && !coSignature) incomplete.push("Co-Borrower Signature");
             [1, 2, 4, 5, 6, 7].forEach(function (s) {
               if (validateStep(s)) incomplete.push(labels[s]);
             });
