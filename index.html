@@ -3179,7 +3179,13 @@ function UBAForm() {
           }, "Phone:"), " ", svc.phone), svc.mail && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
             className: "font-semibold"
           }, "Mail:"), " ", svc.name, ", Attn: Loss Mitigation, ", svc.mail)))) : svc.email ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("a", {
-            href: "mailto:" + svc.email + "?subject=" + encodeURIComponent("Loss Mitigation Application Form 710 - Loan #" + data.property.loanNumber + " - Property Address: " + (data.property.address ? [data.property.address, data.property.city, data.property.state, data.property.zip].filter(Boolean).join(", ") : "See Form")) + "&body=" + encodeURIComponent("Please find my completed Form 710 mortgage assistance application attached.\n\nBorrower: " + bName + "\nProperty Address: " + [data.property.address, data.property.city, data.property.state, data.property.zip].filter(Boolean).join(", ") + "\nLoan Number: " + data.property.loanNumber),
+            href: function () {
+              var ln = data.property.loanNumber || "Unknown";
+              var addr = [data.property.address, data.property.city, data.property.state, data.property.zip].filter(Boolean).join(", ") || "See Form";
+              var subj = "Loss Mitigation Application Form 710 - Loan #" + ln + " - Property Address: " + addr;
+              var body = "Please find my completed Form 710 mortgage assistance application attached.\n\nBorrower: " + bName + "\nProperty Address: " + addr + "\nLoan Number: " + ln;
+              return "mailto:" + svc.email + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
+            }(),
             style: {
               background: "#c85a2a",
               display: "flex",
