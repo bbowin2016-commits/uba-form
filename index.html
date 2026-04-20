@@ -305,9 +305,7 @@ var INIT = {
     listingAgent: "",
     hasHOA: false,
     hoaMonthly: "",
-    loanNumber: "",
-    estimatedValue: "",
-    unpaidBalance: ""
+    loanNumber: ""
   },
   hardship: {
     goal: "keep",
@@ -1600,8 +1598,6 @@ function UBAForm() {
           if (!p.city) _miss.push("City");
           if (!p.zip) _miss.push("ZIP Code");
           if (!p.loanNumber) _miss.push("Mortgage Loan Number");
-          if (!p.estimatedValue) _miss.push("Estimated Property Value");
-          if (!p.unpaidBalance) _miss.push("Unpaid Loan Balance");
           return _miss.length ? "Please complete: " + _miss.join(", ") + "." : null;
         }
       case 5:
@@ -1890,25 +1886,7 @@ function UBAForm() {
           placeholder: "As shown on your statement"
         })), /*#__PURE__*/React.createElement("div", {
           className: "grid grid-cols-2 gap-3"
-        }, /*#__PURE__*/React.createElement(Lbl, {
-          label: "Estimated Property Value"
-        }, /*#__PURE__*/React.createElement(Inp, {
-          type: "number",
-          value: data.property.estimatedValue,
-          onChange: function onChange(v) {
-            return setProperty("estimatedValue", v);
-          },
-          placeholder: "$0.00"
-        })), /*#__PURE__*/React.createElement(Lbl, {
-          label: "Unpaid Principal Balance"
-        }, /*#__PURE__*/React.createElement(Inp, {
-          type: "number",
-          value: data.property.unpaidBalance,
-          onChange: function onChange(v) {
-            return setProperty("unpaidBalance", v);
-          },
-          placeholder: "$0.00"
-        }))));
+        }));
       case 5:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
           Icon: AlertTriangle,
