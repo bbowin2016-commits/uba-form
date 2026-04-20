@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mortgage Assistance Application | Bowin Law Group</title>
+  <title>Mortgage Assistance Application</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
@@ -78,7 +78,7 @@ function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var NAV_COLOR = "#1e3a5f";
-var GOLD = "#c9a84c";
+var GOLD = "#f4906a"; // coral accent - replaces gold
 var FORM710_B64 = window.__FORM710_B64__;
 
 // ── Servicers ─────────────────────────────────────────────────────────────────
@@ -1042,7 +1042,10 @@ var SignaturePad = memo(function (_ref11) {
   })), !value && /*#__PURE__*/React.createElement("div", {
     className: "text-xs text-slate-400 mt-1 text-center"
   }, "Sign above using your finger or mouse"), value && /*#__PURE__*/React.createElement("div", {
-    className: "text-xs text-green-600 mt-1 text-center"
+    className: "text-xs mt-1 text-center",
+    style: {
+      color: "#c85a2a"
+    }
   }, "Signature captured"));
 });
 
@@ -1305,7 +1308,7 @@ function UBAForm() {
               total_income: "$" + fmt(totalIncome()),
               total_assets: "$" + fmt(totalAssets()),
               hardship_explanation: h.explanation || "Not provided",
-              files_list: "Client will email documents separately to bbowin2016@gmail.com"
+              files_list: "Client will upload documents to servicer portal"
             });
           case 6:
             setSubmitted(true);
@@ -1320,7 +1323,7 @@ function UBAForm() {
           case 7:
             _context.p = 7;
             _t = _context.v;
-            setError("Submission failed: " + _t.message + ". Please email bbowin2016@gmail.com.");
+            setError("Submission failed: " + _t.message + ". Please try again or contact support.");
           case 8:
             _context.p = 8;
             setLoading(false);
@@ -2008,65 +2011,72 @@ function UBAForm() {
             color: GOLD
           },
           className: "text-xs font-bold uppercase tracking-widest mb-3"
-        }, "Why I Built This"), /*#__PURE__*/React.createElement("p", {
-          className: "text-sm leading-relaxed mb-3",
+        }, "Mortgage Assistance Made Simple"), /*#__PURE__*/React.createElement("div", {
           style: {
-            textAlign: "justify"
-          }
-        }, "My name is Beau Bowin. I am a Florida licensed attorney and the founder of Bowin Law Group in Melbourne, Florida. Over the past 17 years I have helped more than 10,000 Brevard County families navigate bankruptcy, foreclosure defense, mortgage modifications, short sales, deeds-in-lieu of foreclosure, and strategic defaults. In that time I have watched servicers lose documents, delay reviews, and deny modifications on technicalities, often because the application was incomplete or the hardship explanation was too vague to take seriously."), /*#__PURE__*/React.createElement("p", {
-          className: "text-sm leading-relaxed mb-3",
-          style: {
-            color: GOLD,
-            fontStyle: "italic",
             fontFamily: "Georgia,serif",
-            fontSize: "15px",
-            textAlign: "justify"
+            fontSize: "22px",
+            fontWeight: "500",
+            lineHeight: "1.3",
+            marginBottom: "14px"
           }
-        }, "I built this tool because I was tired of watching that happen to my clients."), /*#__PURE__*/React.createElement("p", {
+        }, "You Have Options.", /*#__PURE__*/React.createElement("br", null), "Let's Find Yours."), /*#__PURE__*/React.createElement("p", {
           className: "text-sm leading-relaxed mb-3",
           style: {
-            textAlign: "justify"
+            textAlign: "justify",
+            color: "#d4dbe8"
           }
-        }, "This questionnaire walks you through every section of the Uniform Borrower Assistance Form, the standard mortgage modification application used by Fannie Mae, Freddie Mac, and most major servicers. Each section includes my personal guidance on what servicers actually look for and what language gets applications approved versus ignored. When you finish, a completed application package is generated automatically for you to submit directly to your servicer. You can also send a copy to my office for attorney review."), /*#__PURE__*/React.createElement("p", {
+        }, "Falling behind on your mortgage is one of the most stressful things a homeowner can face. The phone calls, the letters, the uncertainty about what comes next. It is exhausting. But it does not have to end in foreclosure."), /*#__PURE__*/React.createElement("p", {
           className: "text-sm leading-relaxed mb-3",
           style: {
-            textAlign: "justify"
+            textAlign: "justify",
+            color: "#d4dbe8"
           }
-        }, "You are not doing this alone. Your information is transmitted securely and goes only to Bowin Law Group. Nothing is sent to your servicer without your review first."), /*#__PURE__*/React.createElement("p", {
-          className: "text-sm",
+        }, "Mortgage servicers are required by federal guidelines to review you for assistance before they can foreclose. That means you have rights, and you have time to use them. The question is whether your application gives the servicer what it needs to say yes."), /*#__PURE__*/React.createElement("p", {
+          className: "text-sm leading-relaxed mb-4",
           style: {
-            color: "#93b4d8"
+            textAlign: "justify",
+            color: "#d4dbe8"
           }
-        }, "Questions before you start? Email us at ", /*#__PURE__*/React.createElement("strong", {
+        }, "This platform walks you through the Uniform Borrower Assistance Form, the standard application used by Fannie Mae, Freddie Mac, and virtually every major mortgage servicer in the country. When you finish, you will have a completed, signed application package ready to submit directly to your servicer."), /*#__PURE__*/React.createElement("div", {
           style: {
-            color: "white"
+            borderTop: "1px solid rgba(255,255,255,0.12)",
+            paddingTop: "12px"
           }
-        }, "bbowin2016@gmail.com"), "."), /*#__PURE__*/React.createElement("p", {
-          className: "text-xs mt-2",
+        }, /*#__PURE__*/React.createElement("p", {
+          className: "text-xs",
           style: {
-            color: "#6a94bc"
+            color: "#93b4d8",
+            margin: "0 0 4px"
           }
-        }, "Your progress is saved automatically in this browser. It is not transmitted until you click Submit.")));
+        }, "Questions before you start? Help is available."), /*#__PURE__*/React.createElement("p", {
+          className: "text-xs",
+          style: {
+            color: "#6a94bc",
+            margin: "0"
+          }
+        }, "Your progress is saved automatically in this browser. It is not transmitted until you submit."))));
       case 2:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#f0faf4",
-            border: "1.5px solid #a7d9b8",
+            background: "#fff7f4",
+            border: "1.5px solid #f4b99a",
             borderRadius: "12px"
           },
           className: "p-5"
-        }, /*#__PURE__*/React.createElement("div", {
-          className: "text-base font-semibold text-green-800 mb-4",
+        }, /*#__PURE__*/React.createElement("div", _defineProperty({
+          className: "text-base font-semibold mb-4",
           style: {
-            fontFamily: "Georgia,serif"
+            color: "#1a2744"
           }
-        }, "Before You Begin"), /*#__PURE__*/React.createElement("div", {
+        }, "style", {
+          fontFamily: "Georgia,serif"
+        }), "Before You Begin"), /*#__PURE__*/React.createElement("div", {
           className: "space-y-4 text-sm text-slate-700"
         }, /*#__PURE__*/React.createElement("div", {
           className: "flex gap-3"
         }, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#1a6b3c",
+            background: "#1a2744",
             color: "white",
             width: "22px",
             height: "22px",
@@ -2089,7 +2099,7 @@ function UBAForm() {
           className: "flex gap-3"
         }, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#1a6b3c",
+            background: "#1a2744",
             color: "white",
             width: "22px",
             height: "22px",
@@ -2112,7 +2122,7 @@ function UBAForm() {
           className: "flex gap-3"
         }, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#1a6b3c",
+            background: "#1a2744",
             color: "white",
             width: "22px",
             height: "22px",
@@ -2135,7 +2145,7 @@ function UBAForm() {
           className: "flex gap-3"
         }, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#1a6b3c",
+            background: "#1a2744",
             color: "white",
             width: "22px",
             height: "22px",
@@ -2158,7 +2168,7 @@ function UBAForm() {
           className: "flex gap-3"
         }, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#1a6b3c",
+            background: "#1a2744",
             color: "white",
             width: "22px",
             height: "22px",
@@ -2181,7 +2191,7 @@ function UBAForm() {
           className: "flex gap-3"
         }, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#1a6b3c",
+            background: "#1a2744",
             color: "white",
             width: "22px",
             height: "22px",
@@ -2204,7 +2214,7 @@ function UBAForm() {
           className: "flex gap-3"
         }, /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#1a6b3c",
+            background: "#1a2744",
             color: "white",
             width: "22px",
             height: "22px",
@@ -2223,7 +2233,193 @@ function UBAForm() {
           }
         }, /*#__PURE__*/React.createElement("span", {
           className: "font-semibold text-slate-800"
-        }, "If you need help at any point."), " Email Bowin Law Group at ", /*#__PURE__*/React.createElement("strong", null, "bbowin2016@gmail.com"), ". We are here to help you through this process.")))));
+        }, "If you need help at any point."), " Help is available. Questions can be submitted from the final step.")))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            background: "#fff7f4",
+            border: "1.5px solid #f4b99a",
+            borderRadius: "12px",
+            marginTop: "16px"
+          },
+          className: "p-5"
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "text-base font-semibold mb-4",
+          style: {
+            color: "#1a2744",
+            fontFamily: "Georgia,serif"
+          }
+        }, "Three Possible Paths"), /*#__PURE__*/React.createElement("p", {
+          className: "text-sm mb-4",
+          style: {
+            color: "#555",
+            textAlign: "justify"
+          }
+        }, "Not sure which option is right for you? This application covers all three. Your servicer will evaluate your situation and present the options you qualify for."), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px"
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            background: "white",
+            border: "0.5px solid #f4b99a",
+            borderRadius: "10px",
+            padding: "12px 14px",
+            display: "flex",
+            gap: "12px",
+            alignItems: "flex-start"
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            background: "#fff0ea",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0
+          }
+        }, /*#__PURE__*/React.createElement("svg", {
+          width: "16",
+          height: "16",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "#c85a2a",
+          strokeWidth: "2"
+        }, /*#__PURE__*/React.createElement("path", {
+          d: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+        }), /*#__PURE__*/React.createElement("polyline", {
+          points: "9 22 9 12 15 12 15 22"
+        }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: "13px",
+            fontWeight: "500",
+            color: "#1a2744",
+            marginBottom: "3px"
+          }
+        }, "Loan Modification"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: "12.5px",
+            color: "#666",
+            lineHeight: "1.5",
+            textAlign: "justify"
+          }
+        }, "Restructure your loan terms to lower your monthly payment and stay in your home."))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            background: "white",
+            border: "0.5px solid #f4b99a",
+            borderRadius: "10px",
+            padding: "12px 14px",
+            display: "flex",
+            gap: "12px",
+            alignItems: "flex-start"
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            background: "#fff0ea",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0
+          }
+        }, /*#__PURE__*/React.createElement("svg", {
+          width: "16",
+          height: "16",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "#c85a2a",
+          strokeWidth: "2"
+        }, /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "10"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "12",
+          y1: "8",
+          x2: "12",
+          y2: "12"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "12",
+          y1: "16",
+          x2: "12.01",
+          y2: "16"
+        }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: "13px",
+            fontWeight: "500",
+            color: "#1a2744",
+            marginBottom: "3px"
+          }
+        }, "Short Sale"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: "12.5px",
+            color: "#666",
+            lineHeight: "1.5",
+            textAlign: "justify"
+          }
+        }, "Sell the property for less than what you owe with servicer approval and avoid foreclosure on your record."))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            background: "white",
+            border: "0.5px solid #f4b99a",
+            borderRadius: "10px",
+            padding: "12px 14px",
+            display: "flex",
+            gap: "12px",
+            alignItems: "flex-start"
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: "32px",
+            height: "32px",
+            borderRadius: "50%",
+            background: "#fff0ea",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0
+          }
+        }, /*#__PURE__*/React.createElement("svg", {
+          width: "16",
+          height: "16",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "#c85a2a",
+          strokeWidth: "2"
+        }, /*#__PURE__*/React.createElement("polyline", {
+          points: "20 12 20 22 4 22 4 12"
+        }), /*#__PURE__*/React.createElement("rect", {
+          x: "2",
+          y: "7",
+          width: "20",
+          height: "5"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "12",
+          y1: "22",
+          x2: "12",
+          y2: "7"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"
+        }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: "13px",
+            fontWeight: "500",
+            color: "#1a2744",
+            marginBottom: "3px"
+          }
+        }, "Deed-in-Lieu of Foreclosure"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: "12.5px",
+            color: "#666",
+            lineHeight: "1.5",
+            textAlign: "justify"
+          }
+        }, "Transfer the property back to your servicer voluntarily in exchange for release from the debt."))))));
       case 3:
         return /*#__PURE__*/React.createElement("div", null, function () {
           try {
@@ -2292,7 +2488,7 @@ function UBAForm() {
           Icon: User,
           title: "Borrower Information"
         }), /*#__PURE__*/React.createElement(InstructionBox, {
-          text: "Use your full legal name exactly as it appears on your mortgage documents. Your Social Security Number is required by the servicer to locate your loan account. All information is transmitted securely to Bowin Law Group only. Nothing is shared with your servicer until I review it first."
+          text: "Use your full legal name exactly as it appears on your mortgage documents. Your Social Security Number is required by the servicer to locate your loan account. All information is transmitted securely. Nothing is shared with your servicer until you review and submit your package."
         }), /*#__PURE__*/React.createElement(BorrowerFields, {
           vals: data.borrower,
           onChange: setBorrower,
@@ -2586,14 +2782,17 @@ function UBAForm() {
           onChange: setCIncome
         })), /*#__PURE__*/React.createElement("div", {
           style: {
-            background: "#f0faf4",
-            border: "1px solid #a7d9b8"
+            background: "#fff7f4",
+            border: "1px solid #f4b99a"
           },
           className: "mt-3 rounded-xl p-3 text-sm"
         }, /*#__PURE__*/React.createElement("span", {
           className: "font-semibold text-slate-700"
         }, "Total Monthly Income: "), /*#__PURE__*/React.createElement("span", {
-          className: "font-bold text-green-700"
+          className: "font-bold",
+          style: {
+            color: "#c85a2a"
+          }
         }, "$", fmt(totalIncome()))));
       case 9:
         return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
@@ -2709,9 +2908,7 @@ function UBAForm() {
             }
           }, "Application Submitted"), /*#__PURE__*/React.createElement("div", {
             className: "text-sm text-slate-600 mb-6 leading-relaxed"
-          }, "Your application has been sent to Bowin Law Group for review.", /*#__PURE__*/React.createElement("br", null), "Check your email for confirmation and next steps."), /*#__PURE__*/React.createElement("div", {
-            className: "text-xs text-slate-400"
-          }, "Bowin Law Group | bbowin2016@gmail.com")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
+          }, "Your application has been submitted.", /*#__PURE__*/React.createElement("br", null), "Check your email for confirmation and next steps.")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionHeader, {
             Icon: Eye,
             title: "Review and Submit"
           }), /*#__PURE__*/React.createElement("div", {
@@ -2724,7 +2921,7 @@ function UBAForm() {
             className: "text-sm font-semibold text-amber-800 mb-1"
           }, "Please review before submitting"), /*#__PURE__*/React.createElement("div", {
             className: "text-sm text-amber-700"
-          }, "Bowin Law Group will review your application and follow up with you directly.")), /*#__PURE__*/React.createElement(SummaryCard, {
+          }, "Your completed package will be reviewed and you will be contacted with next steps.")), /*#__PURE__*/React.createElement(SummaryCard, {
             title: "Servicer",
             onEdit: function onEdit() {
               return setStep(3);
@@ -2828,14 +3025,14 @@ function UBAForm() {
             }]
           }), /*#__PURE__*/React.createElement("div", {
             style: {
-              border: "1px solid #c2d0e8",
+              border: "1px solid #f4b99a",
               borderRadius: "12px"
             },
             className: "p-4 mt-1"
           }, /*#__PURE__*/React.createElement("div", {
             className: "text-xs font-bold uppercase tracking-widest mb-1",
             style: {
-              color: NAV_COLOR
+              color: "#c85a2a"
             }
           }, "Borrower Signature"), /*#__PURE__*/React.createElement("div", {
             className: "text-xs text-slate-500 mb-2"
@@ -2912,7 +3109,7 @@ function UBAForm() {
             target: "_blank",
             rel: "noopener noreferrer",
             style: {
-              background: "#2d8a4e",
+              background: "#c85a2a",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -2949,9 +3146,9 @@ function UBAForm() {
           }, "Phone:"), " ", svc.phone), svc.mail && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
             className: "font-semibold"
           }, "Mail:"), " ", svc.name, ", Attn: Loss Mitigation, ", svc.mail)))) : svc.email ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("a", {
-            href: "mailto:" + svc.email + "?subject=Mortgage Assistance Application - Loan " + data.property.loanNumber + "&body=Please find my completed Form 710 mortgage assistance application attached. Borrower: " + bName + ". Property: " + (data.property.address || "see form") + ".",
+            href: "mailto:" + svc.email + "?subject=" + encodeURIComponent("Loss Mitigation Application Form 710 - Loan #" + data.property.loanNumber + " - Property Address: " + (data.property.address ? [data.property.address, data.property.city, data.property.state, data.property.zip].filter(Boolean).join(", ") : "See Form")) + "&body=" + encodeURIComponent("Please find my completed Form 710 mortgage assistance application attached.\n\nBorrower: " + bName + "\nProperty Address: " + [data.property.address, data.property.city, data.property.state, data.property.zip].filter(Boolean).join(", ") + "\nLoan Number: " + data.property.loanNumber),
             style: {
-              background: "#2d8a4e",
+              background: "#c85a2a",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -2994,7 +3191,7 @@ function UBAForm() {
             }
           }, "Step 3: Attorney Review (Recommended)"), /*#__PURE__*/React.createElement("div", {
             className: "text-xs text-slate-500 mb-3"
-          }, "Optional but recommended: send a copy to Bowin Law Group for attorney review. We catch errors, strengthen hardship explanations, and can handle follow-up communications with your servicer on your behalf."), /*#__PURE__*/React.createElement("button", {
+          }, "Optional but recommended: submit a copy for professional review. An attorney can review your application, strengthen your hardship explanation, and handle follow-up communications with your servicer on your behalf."), /*#__PURE__*/React.createElement("button", {
             onClick: function onClick() {
               var steps = [3, 4, 6, 7, 8, 9];
               for (var _i4 = 0, _steps = steps; _i4 < _steps.length; _i4++) {
@@ -3015,9 +3212,7 @@ function UBAForm() {
             className: "w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
           }, /*#__PURE__*/React.createElement(CheckCircle, {
             size: 16
-          }), loading ? "Sending..." : "Submit to Bowin Law Group"))), /*#__PURE__*/React.createElement("div", {
-            className: "mt-4 text-xs text-slate-400 text-center"
-          }, "Bowin Law Group | bbowin2016@gmail.com"));
+          }), loading ? "Sending..." : "Submit for Attorney Review"))));
         }
       default:
         return null;
@@ -3027,7 +3222,7 @@ function UBAForm() {
   return /*#__PURE__*/React.createElement("div", {
     className: "min-h-screen",
     style: {
-      background: "#eef0f4"
+      background: "#f5f0ee"
     },
     ref: topRef
   }, /*#__PURE__*/React.createElement("div", {
@@ -3039,21 +3234,25 @@ function UBAForm() {
     className: "max-w-xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      color: "#7fafd4"
+      color: "#f4906a"
     },
     className: "text-xs font-bold uppercase tracking-widest mb-1"
-  }, "Bowin Law Group"), /*#__PURE__*/React.createElement("div", {
+  }, "Mortgage Assistance Made Simple"), /*#__PURE__*/React.createElement("div", {
     className: "text-xl font-bold text-white",
     style: {
       fontFamily: "Georgia,serif"
     }
   }, "Mortgage Assistance Application"), /*#__PURE__*/React.createElement("div", {
     style: {
-      color: "#7fafd4"
+      color: "#c8d3e8"
     },
     className: "text-xs mt-1"
-  }, "Uniform Borrower Assistance Form, Fannie Mae Form 710"))), /*#__PURE__*/React.createElement("div", {
-    className: "bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-10 shadow-sm"
+  }, "Uniform Borrower Assistance Form | Fannie Mae Form 710"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "white",
+      borderBottom: "1px solid #f4c4a8"
+    },
+    className: "px-4 py-3 sticky top-0 z-10 shadow-sm"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-xl mx-auto"
   }, /*#__PURE__*/React.createElement("div", {
@@ -3062,7 +3261,7 @@ function UBAForm() {
     className: "text-xs text-slate-400 font-medium"
   }, "Step ", step, " of ", STEPS.length), /*#__PURE__*/React.createElement("span", {
     style: {
-      color: NAV_COLOR
+      color: "#c85a2a"
     },
     className: "text-xs font-bold"
   }, STEPS[step - 1].label)), /*#__PURE__*/React.createElement("div", {
@@ -3070,7 +3269,7 @@ function UBAForm() {
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       width: "".concat(pct, "%"),
-      background: GOLD,
+      background: "#c85a2a",
       transition: "width 0.35s ease"
     },
     className: "h-2 rounded-full"
@@ -3088,7 +3287,7 @@ function UBAForm() {
       title: s.label,
       className: "w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center transition-all",
       style: {
-        background: done ? "#2d8a4e" : active ? NAV_COLOR : "#e2e8f0",
+        background: done ? "#c85a2a" : active ? NAV_COLOR : "#e2e8f0",
         color: done || active ? "white" : "#94a3b8"
       }
     }, done ? "✓" : s.id);
@@ -3128,7 +3327,7 @@ function UBAForm() {
       }
     },
     style: {
-      background: NAV_COLOR
+      background: "#c85a2a"
     },
     className: "flex-1 flex items-center justify-center gap-1.5 py-3.5 rounded-xl text-white font-bold text-sm hover:opacity-90 transition-opacity"
   }, "Next", /*#__PURE__*/React.createElement(ChevronRight, {
