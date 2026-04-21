@@ -3126,13 +3126,7 @@ function UBAForm() {
             }
           }, /*#__PURE__*/React.createElement(Printer, {
             size: 16
-          }), loading ? "Generating PDF..." : !pdfReady ? "Loading PDF library..." : "Step 1: Download Application Package (Cover Letter + Form 710)"), svc && /*#__PURE__*/React.createElement("div", {
-            style: {
-              border: "1px solid #c2d0e8",
-              borderRadius: "12px"
-            },
-            className: "p-4"
-          }, /*#__PURE__*/React.createElement("div", {
+          }), loading ? "Generating PDF..." : !pdfReady ? "Loading PDF library..." : "Step 1: Download Application Package (Cover Letter + Form 710)"), /*#__PURE__*/React.createElement("div", {
             style: {
               border: "1px solid #c2d0e8",
               borderRadius: "12px"
@@ -3166,15 +3160,18 @@ function UBAForm() {
             className: "w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
           }, /*#__PURE__*/React.createElement(CheckCircle, {
             size: 16
-          }), loading ? "Sending..." : "Submit for Attorney Review")), /*#__PURE__*/React.createElement("div", {
+          }), loading ? "Sending..." : "Submit for Attorney Review")), svc && /*#__PURE__*/React.createElement("div", {
             style: {
               border: "1px solid #c2d0e8",
               borderRadius: "12px"
             },
             className: "p-4"
-          }, "yle=", {
-            color: NAV_COLOR
-          }, ">Step 3: Submit to Your Servicer"), svc.portal ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("a", {
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "text-xs font-bold uppercase tracking-widest mb-3",
+            style: {
+              color: NAV_COLOR
+            }
+          }, "Step 3: Submit to Your Servicer"), svc.portal ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("a", {
             href: "https://" + svc.portal.replace(/^https?:\/\//, ""),
             target: "_blank",
             rel: "noopener noreferrer",
