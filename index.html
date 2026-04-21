@@ -2924,8 +2924,8 @@ function UBAForm() {
         }, "Keep a copy of everything you send. Also keep a written log of every phone call you have with your servicer: the date, the time, the name of the person you spoke with, and a summary of what was said. If your case ever proceeds to court, that log becomes evidence.")));
       case 11:
         {
-          var bName = [data.borrower.firstName, data.borrower.middleName, data.borrower.lastName].filter(Boolean).join(" ");
-          var cName = [data.coBorrower.firstName, data.coBorrower.lastName].filter(Boolean).join(" ");
+          var bName = [(data.borrower || {}).firstName, (data.borrower || {}).middleName, (data.borrower || {}).lastName].filter(Boolean).join(" ");
+          var cName = [(data.coBorrower || {}).firstName, (data.coBorrower || {}).lastName].filter(Boolean).join(" ");
           return submitted ? /*#__PURE__*/React.createElement("div", {
             className: "text-center py-10"
           }, /*#__PURE__*/React.createElement(CheckCircle, {
@@ -2979,7 +2979,7 @@ function UBAForm() {
               value: bName || ""
             }, {
               label: "SSN",
-              value: data.borrower.ssn ? "ending " + data.borrower.ssn.slice(-4) : ""
+              value: data.borrower.ssn || "" ? "ending " + (data.borrower.ssn || "").slice(-4) : ""
             }, {
               label: "Primary Phone",
               value: data.borrower.primaryPhone
@@ -3024,7 +3024,7 @@ function UBAForm() {
               value: data.hardship.goal
             }, {
               label: "Type(s)",
-              value: data.hardship.types.join(", ")
+              value: (data.hardship.types || []).join(", ")
             }, {
               label: "Date",
               value: data.hardship.date
