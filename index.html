@@ -1802,7 +1802,7 @@ function UBAForm() {
               break;
             }
             s = _criticalSteps2[_i3];
-            err = validateStep(s);
+            err = validateStep(s, data);
             if (!err) {
               _context5.n = 3;
               break;
@@ -1931,10 +1931,11 @@ function UBAForm() {
   }();
 
   // ── Validation ────────────────────────────────────────────────────────────
-  var validateStep = function validateStep(s) {
-    var b = data.borrower,
-      p = data.property,
-      h = data.hardship;
+  var validateStep = function validateStep(s, d) {
+    var _data = d || data;
+    var b = _data.borrower,
+      p = _data.property,
+      h = _data.hardship;
     switch (s) {
       case 1:
         return null;
@@ -1943,7 +1944,7 @@ function UBAForm() {
         return null;
       // Instructions - no validation
       case 3:
-        if (!data.servicer) return "Please select your mortgage servicer.";
+        if (!_data.servicer || _data.servicer === "" || _data.servicer === "-- Select your servicer --") return "Please select your mortgage servicer.";
         return null;
       case 4:
         {
@@ -3147,7 +3148,7 @@ function UBAForm() {
               var steps = [3, 4, 6, 7, 8, 9];
               for (var _i4 = 0, _steps = steps; _i4 < _steps.length; _i4++) {
                 var s = _steps[_i4];
-                var e = validateStep(s);
+                var e = validateStep(s, data);
                 if (e) {
                   setValidErr("Step " + s + ": " + e);
                   return;
@@ -3364,7 +3365,7 @@ function UBAForm() {
     size: 16
   }), "Back"), step < STEPS.length && /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
-      var err = validateStep(step);
+      var err = validateStep(step, data);
       if (err) {
         setValidErr(err);
       } else {
