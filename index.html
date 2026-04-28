@@ -1094,26 +1094,30 @@ function UBAForm() {
     _useState12 = _slicedToArray(_useState11, 2),
     validErr = _useState12[0],
     setValidErr = _useState12[1];
-  var _useState13 = useState(function () {
+  var _useState13 = useState(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    showDashboard = _useState14[0],
+    setShowDashboard = _useState14[1];
+  var _useState15 = useState(function () {
       try {
         return localStorage.getItem(STORAGE_KEY + "_sig") || "";
       } catch (e) {
         return "";
       }
     }),
-    _useState14 = _slicedToArray(_useState13, 2),
-    signature = _useState14[0],
-    setSignature = _useState14[1];
-  var _useState15 = useState(function () {
+    _useState16 = _slicedToArray(_useState15, 2),
+    signature = _useState16[0],
+    setSignature = _useState16[1];
+  var _useState17 = useState(function () {
       try {
         return localStorage.getItem(STORAGE_KEY + "_cosig") || "";
       } catch (e) {
         return "";
       }
     }),
-    _useState16 = _slicedToArray(_useState15, 2),
-    coSignature = _useState16[0],
-    setCoSignature = _useState16[1];
+    _useState18 = _slicedToArray(_useState17, 2),
+    coSignature = _useState18[0],
+    setCoSignature = _useState18[1];
   var sigCanvasRef = useRef();
   var coSigCanvasRef = useRef();
   var fileRef = useRef();
@@ -1910,6 +1914,7 @@ function UBAForm() {
             setTimeout(function () {
               return URL.revokeObjectURL(blobUrl2);
             }, 10000);
+            setShowDashboard(true);
             _context5.n = 17;
             break;
           case 16:
@@ -3261,7 +3266,258 @@ function UBAForm() {
             className: "text-xs text-amber-700 mt-2"
           }, "Use First Class mail with a Certificate of Mailing. Keep your receipt as proof of submission date.")) : /*#__PURE__*/React.createElement("div", {
             className: "text-sm text-slate-600 p-3 bg-slate-50 rounded-xl"
-          }, "Contact ", svc.name, " loss mitigation directly", svc.phone ? " at " + svc.phone : "", " to confirm their preferred submission method."))));
+          }, "Contact ", svc.name, " loss mitigation directly", svc.phone ? " at " + svc.phone : "", " to confirm their preferred submission method.")), showDashboard && /*#__PURE__*/React.createElement("div", {
+            id: "whathappensnext",
+            style: {
+              border: "1.5px solid #f4b99a",
+              borderRadius: "12px",
+              background: "#fff7f4",
+              marginTop: "6px"
+            },
+            className: "p-5"
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "text-base font-semibold mb-4",
+            style: {
+              color: "#1a2744",
+              fontFamily: "Georgia,serif"
+            }
+          }, "What Happens Next"), /*#__PURE__*/React.createElement("div", {
+            className: "space-y-4"
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: "flex",
+              gap: "12px",
+              alignItems: "flex-start"
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              width: "36px",
+              height: "36px",
+              borderRadius: "50%",
+              background: "#1a2744",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              fontSize: "13px",
+              fontWeight: "700"
+            }
+          }, "1"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "#1a2744",
+              marginBottom: "2px"
+            }
+          }, "Days 1-3: Acknowledgment"), /*#__PURE__*/React.createElement("p", {
+            className: "text-sm text-slate-600",
+            style: {
+              textAlign: "justify",
+              lineHeight: "1.6"
+            }
+          }, "Your servicer should confirm receipt of your application within a few business days. If you submitted through their online portal, you may see a confirmation number immediately. Save it. If you submitted by email, fax, or mail, call the servicer's loss mitigation department after 3 business days to confirm they received your package."))), /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: "flex",
+              gap: "12px",
+              alignItems: "flex-start"
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              width: "36px",
+              height: "36px",
+              borderRadius: "50%",
+              background: "#1a2744",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              fontSize: "13px",
+              fontWeight: "700"
+            }
+          }, "2"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "#1a2744",
+              marginBottom: "2px"
+            }
+          }, "Days 5-10: Assignment"), /*#__PURE__*/React.createElement("p", {
+            className: "text-sm text-slate-600",
+            style: {
+              textAlign: "justify",
+              lineHeight: "1.6"
+            }
+          }, "Your file will be assigned to a single point of contact. This is the person you will deal with throughout the review. Write down their name, direct phone number, and extension. You will need this information every time you follow up."))), /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: "flex",
+              gap: "12px",
+              alignItems: "flex-start"
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              width: "36px",
+              height: "36px",
+              borderRadius: "50%",
+              background: "#1a2744",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              fontSize: "13px",
+              fontWeight: "700"
+            }
+          }, "3"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "#1a2744",
+              marginBottom: "2px"
+            }
+          }, "Days 15-30: Document Review"), /*#__PURE__*/React.createElement("p", {
+            className: "text-sm text-slate-600",
+            style: {
+              textAlign: "justify",
+              lineHeight: "1.6"
+            }
+          }, "The servicer reviews your application for completeness. This is the stage where they are most likely to request additional documents. Respond to any requests within 48 hours. Delays at this stage are the most common reason applications stall or are denied."))), /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: "flex",
+              gap: "12px",
+              alignItems: "flex-start"
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              width: "36px",
+              height: "36px",
+              borderRadius: "50%",
+              background: "#1a2744",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              fontSize: "13px",
+              fontWeight: "700"
+            }
+          }, "4"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "#1a2744",
+              marginBottom: "2px"
+            }
+          }, "Days 30-60: Decision"), /*#__PURE__*/React.createElement("p", {
+            className: "text-sm text-slate-600",
+            style: {
+              textAlign: "justify",
+              lineHeight: "1.6"
+            }
+          }, "The servicer evaluates your application and issues a decision: approval, denial, or a request for more information. If approved for a trial modification, read the terms carefully before accepting. Trial modifications typically require 3 on-time payments before becoming permanent.")))), /*#__PURE__*/React.createElement("div", {
+            style: {
+              borderTop: "1px solid #f4b99a",
+              marginTop: "16px",
+              paddingTop: "14px"
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "#1a2744",
+              marginBottom: "10px"
+            }
+          }, "Important Reminders"), /*#__PURE__*/React.createElement("div", {
+            className: "space-y-2 text-sm text-slate-600",
+            style: {
+              lineHeight: "1.6"
+            }
+          }, /*#__PURE__*/React.createElement("p", {
+            style: {
+              textAlign: "justify"
+            }
+          }, "Continue making whatever mortgage payment you can afford during the review period. Servicers view continued payments favorably."), /*#__PURE__*/React.createElement("p", {
+            style: {
+              textAlign: "justify"
+            }
+          }, "Do not ignore any correspondence from your servicer. Every letter and every call matters."), /*#__PURE__*/React.createElement("p", {
+            style: {
+              textAlign: "justify"
+            }
+          }, "If your financial situation changes during the review (new income, additional hardship, job change), notify your servicer immediately."), /*#__PURE__*/React.createElement("p", {
+            style: {
+              textAlign: "justify"
+            }
+          }, "Keep copies of everything you submit and everything you receive."), /*#__PURE__*/React.createElement("p", {
+            style: {
+              textAlign: "justify"
+            }
+          }, "If you are denied, you have the right to appeal. The denial letter will include the specific reason and instructions for appeal."))), /*#__PURE__*/React.createElement("div", {
+            style: _defineProperty({
+              borderTop: "1px solid #f4b99a",
+              marginTop: "16px",
+              paddingTop: "14px",
+              background: "#fff0ea",
+              borderRadius: "10px",
+              padding: "14px"
+            }, "marginTop", "16px")
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "#1a2744",
+              marginBottom: "6px"
+            }
+          }, "When to Seek Legal Help"), /*#__PURE__*/React.createElement("p", {
+            className: "text-sm text-slate-600",
+            style: {
+              textAlign: "justify",
+              lineHeight: "1.6",
+              marginBottom: "8px"
+            }
+          }, "If your application is denied, or if your servicer files a foreclosure complaint while your application is under review, contact a foreclosure defense attorney immediately. You have legal rights that must be exercised within specific deadlines."), /*#__PURE__*/React.createElement("div", {
+            style: {
+              background: "white",
+              border: "1px solid #f4b99a",
+              borderRadius: "8px",
+              padding: "10px 12px",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px"
+            }
+          }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "13px",
+              fontWeight: "600",
+              color: "#1a2744"
+            }
+          }, "Bowin Law Group"), /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: "12px",
+              color: "#c85a2a"
+            }
+          }, "Foreclosure Defense & Loss Mitigation"), /*#__PURE__*/React.createElement("a", {
+            href: "https://www.bowinlaw.com",
+            target: "_blank",
+            rel: "noopener noreferrer",
+            style: {
+              fontSize: "12px",
+              color: "#2563a8",
+              textDecoration: "underline"
+            }
+          }, "www.bowinlaw.com")))), /*#__PURE__*/React.createElement("button", {
+            onClick: function onClick() {
+              return window.print();
+            },
+            style: {
+              background: "#1a2744",
+              marginTop: "16px"
+            },
+            className: "w-full flex items-center justify-center gap-2 py-3 rounded-xl text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+          }, /*#__PURE__*/React.createElement(Printer, {
+            size: 16
+          }), " Print This Page"))));
         }
       default:
         return null;
